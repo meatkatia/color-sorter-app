@@ -4,70 +4,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Color Sorter</title>
   <style>
+    /* Full-screen reset */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body { 
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background-color: #000;
+      background-color: #000; /* Starts pitch black */
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       overflow-x: hidden;
-      text-align: center;
+      /* This makes the background smoothly fade into the new colors */
+      transition: background 1.5s ease-in-out; 
     }
+
+    /* We put the title and button in a sticky header so you can scroll the photos but always upload more */
+    .header {
+      text-align: center;
+      padding: 8vh 20px 4vh;
+      /* Semi-transparent background with a blur so the gradient shows through */
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
     h1 { 
       font-size: 8vw; 
       text-transform: uppercase;
       font-weight: 900;
       letter-spacing: -1px;
-      padding: 6vh 20px 3vh; 
+      margin-bottom: 20px;
     }
+
     input[type='file'] { 
       appearance: none;
       -webkit-appearance: none;
       width: 90vw; 
       max-width: 400px;
-      padding: 2.5vh 0;
-      font-size: 5vw;
+      padding: 15px 0;
+      font-size: 1.2rem;
       background: #fff;
       color: #000;
       border: none;
       cursor: pointer;
       font-weight: bold;
       text-transform: uppercase;
-      margin: 0 auto 4vh;
       border-radius: 4px;
-      display: block;
     }
+
+    /* The Moodboard Grid */
     #gallery { 
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); 
-      gap: 4px; 
-      padding: 0 4px 10vh; 
-      width: 100vw;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-    .photo-card { 
-      background: #111; 
-      position: relative; 
-      aspect-ratio: 1; 
       display: flex;
-      flex-direction: column;
-      overflow: hidden; 
+      flex-wrap: wrap;
+      justify-content: center;
+      /* Remove padding to let images hit the absolute edge of the screen */
+      width: 100vw;
+      padding-bottom: 10vh; /* space at the very bottom */
     }
+
+    .photo-card { 
+      /* Flex properties allow them to size dynamically but aim for 3 across */
+      flex: 1 1 33%; 
+      min-width: 100px;
+      aspect-ratio: 1; 
+      /* THE OVERLAP: A negative margin forces the images to bleed into each other */
+      margin: -1px; 
+      position: relative; 
+      overflow: hidden;
+      /* Smooth pop-out effect on hover */
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0.3s;
+      z-index: 1;
+    }
+
+    /* When you tap/hover a photo, it pops slightly above the others */
+    .photo-card:hover {
+      transform: scale(1.05);
+      z-index: 10;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
     img { 
       width: 100%; 
       height: 100%; 
       object-fit: cover; 
-    }
-    .color-swatch {
-      position: absolute; 
-      bottom: 0; 
-      left: 0;
-      width: 100%; 
-      height: 20%; 
-      border-top: 1px solid rgba(255,255,255,0.2); 
+      /* Slight darkening to the edges of the photo to separate them slightly */
+      border: 1px solid rgba(0,0,0,0.1); 
     }
   </style>
   
@@ -75,8 +99,11 @@
 </head>
 <body>
 
-  <h1>Color Sorter</h1>
-  <input type="file" id="photo-upload" accept="image/*" multiple>
+  <div class="header">
+    <h1>Color Sorter</h1>
+    <input type="file" id="photo-upload" accept="image/*" multiple>
+  </div>
+  
   <div id="gallery"></div>
 
   <script>
@@ -84,12 +111,11 @@
     const gallery = document.getElementById('gallery');
     const colorThief = new ColorThief();
 
-    // Math function to turn Red, Green, Blue into a "Rainbow Number" (Hue)
     function getHue(r, g, b) {
       r /= 255; g /= 255; b /= 255;
       const max = Math.max(r, g, b), min = Math.min(r, g, b);
       let h;
-      if (max == min) return 0; // It's black, white, or gray
+      if (max == min) return 0; 
       const d = max - min;
       switch (max) {
         case r: h = (g - b) / d + (g < b ? 6 : 0); break;
@@ -100,16 +126,14 @@
     }
 
     uploadButton.addEventListener('change', async function(event) {
-      gallery.innerHTML = '<h2 style="grid-column: span 3; margin-top: 20px;">Processing...</h2>'; 
+      gallery.innerHTML = '<h2 style="width: 100%; margin-top: 40px;">Processing...</h2>'; 
       const files = Array.from(event.target.files);
       const processedPhotos = [];
 
-      // Step 1: Look at every photo and extract the color data
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const imageUrl = URL.createObjectURL(file);
         
-        // We have to wait for the image to load in the background to read its colors
         await new Promise((resolve) => {
           const img = new Image();
           img.src = imageUrl;
@@ -117,7 +141,6 @@
             const dominantColor = colorThief.getColor(img);
             const hue = getHue(dominantColor[0], dominantColor[1], dominantColor[2]);
             
-            // Save all this info into a list
             processedPhotos.push({
               url: imageUrl,
               rgb: dominantColor,
@@ -128,12 +151,32 @@
         });
       }
 
-      // Step 2: Sort the list by the Rainbow Number (Hue)
+      // Sort by color
       processedPhotos.sort((a, b) => a.hue - b.hue);
 
-      // Step 3: Draw the sorted photos onto the screen
-      gallery.innerHTML = ''; // Clear the "Processing..." text
+      // --- NEW BACKGROUND GRADIENT LOGIC ---
+      // We sample 5 colors evenly spaced from your sorted list to make the background gradient
+      if (processedPhotos.length > 0) {
+        let gradientColors = [];
+        let step = Math.max(1, Math.floor(processedPhotos.length / 5));
+        
+        for(let i = 0; i < processedPhotos.length; i += step) {
+          let rgb = processedPhotos[i].rgb;
+          gradientColors.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+        }
+        
+        // Make sure the very last color is included at the bottom
+        let lastRgb = processedPhotos[processedPhotos.length - 1].rgb;
+        gradientColors.push(`rgb(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]})`);
+
+        // Apply it to the background
+        document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
+      }
+
+      // Clear processing text
+      gallery.innerHTML = ''; 
       
+      // Draw the overlapping moodboard
       processedPhotos.forEach(photo => {
         const card = document.createElement('div');
         card.className = 'photo-card';
@@ -141,12 +184,7 @@
         const img = document.createElement('img');
         img.src = photo.url;
         
-        const swatch = document.createElement('div');
-        swatch.className = 'color-swatch';
-        swatch.style.backgroundColor = `rgb(${photo.rgb[0]}, ${photo.rgb[1]}, ${photo.rgb[2]})`;
-
         card.appendChild(img);
-        card.appendChild(swatch);
         gallery.appendChild(card);
       });
     });
