@@ -2,10 +2,17 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WARM & FUZZY</title>
+  <title>WARM + FUZZY</title>
+  
+  <script>
+    window.onerror = function(message, source, lineno) {
+      alert("⚠️ APP CRASHED! Error: " + message + " (Line " + lineno + "). Send a screenshot to your dev!");
+    };
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
-    /* THE NEO-BRUTALIST RESET */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
@@ -72,7 +79,6 @@
       line-height: 1;
     }
 
-    /* THE 8-STYLE COLOR PICKER */
     .color-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -90,7 +96,6 @@
     .combo-opt:active { transform: scale(0.9); }
     .combo-opt.selected { border: 6px solid #fff; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
 
-    /* THE 8 SPECIFIC THEMES */
     .combo-green-black { background: #ccff00; color: #050505; border-color: #ccff00; } 
     .combo-black-green { background: #050505; color: #ccff00; border-color: #ccff00; } 
     .combo-pink-black { background: #ffb3e6; color: #050505; border-color: #ffb3e6; } 
@@ -148,7 +153,7 @@
 <body>
 
   <div id="menu">
-    <h1>WARM<br>& FUZZY</h1>
+    <h1>WARM<br>+ FUZZY</h1>
     <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
     <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
     <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
@@ -178,18 +183,16 @@
   </div>
 
   <script>
-    // 1. Defining variables first so buttons NEVER break
     let currentFriend = '';
     let selectedCombo = 'green-black';
-    let supabase;
+    let supabase = null;
 
-    // 2. Safe Database Connection
     try {
       const supabaseUrl = 'https://dovjvnierlfkhnokflkn.supabase.co';
       const supabaseKey = 'sb_publishable_l33PQiCwTtp7n6-9g_-_Yg_KSeNox6V';
       supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     } catch (err) {
-      console.error("Database failed to load:", err);
+      alert("⚠️ SUPABASE FAILED TO LOAD! Error: " + err.message);
     }
 
     function setCombo(c) { 
@@ -199,7 +202,6 @@
       document.getElementById('opt-' + c).classList.add('selected');
     }
 
-    // 3. The Click Function
     function openCorner(name) {
       currentFriend = name;
       document.getElementById('menu').style.display = 'none';
@@ -208,14 +210,18 @@
       
       if (supabase) {
         fetchNotes();
-        // Setup realtime updates
-        supabase.channel('custom-all-channel')
-          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notes' }, (payload) => {
-            if(payload.new.friend_name === currentFriend) fetchNotes();
-          })
-          .subscribe();
+        // Setup real-time listeners safely
+        try {
+          supabase.channel('custom-all-channel')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notes' }, (payload) => {
+              if(payload.new.friend_name === currentFriend) fetchNotes();
+            })
+            .subscribe();
+        } catch (e) {
+          console.log("Realtime failed, but notes will still work.");
+        }
       } else {
-        document.getElementById('notes-list').innerHTML = '<p style="color:red;">Database offline.</p>';
+        document.getElementById('notes-list').innerHTML = '<p style="color:red; font-size: 2rem;">DATABASE OFFLINE.</p>';
       }
     }
 
@@ -230,7 +236,6 @@
       
       try {
         const { data, error } = await supabase.from('notes').select('*').eq('friend_name', currentFriend).order('created_at', { ascending: false });
-        
         if (error) throw error;
         
         list.innerHTML = '';
@@ -247,12 +252,12 @@
           list.appendChild(div);
         });
       } catch (err) {
-        list.innerHTML = '<p style="color:red;">ERROR LOADING NOTES.</p>';
+        list.innerHTML = '<p style="color:red;">ERROR LOADING NOTES: ' + err.message + '</p>';
       }
     }
 
     async function submitNote() {
-      if (!supabase) return alert("Database not connected!");
+      if (!supabase) return alert("Database is not connected!");
       
       const msg = document.getElementById('note-text').value;
       if (!msg) return;
@@ -260,17 +265,19 @@
       document.getElementById('sub-btn').innerText = "SAVING...";
       
       try {
-        await supabase.from('notes').insert([{ 
+        const { error } = await supabase.from('notes').insert([{ 
           friend_name: currentFriend, 
           message: msg, 
           color_combo: selectedCombo 
         }]);
         
+        if (error) throw error;
+
         document.getElementById('note-text').value = '';
         document.getElementById('sub-btn').innerText = "DROP NOTE";
-        fetchNotes(); // Immediately show the new note
+        fetchNotes();
       } catch (err) {
-        alert("Failed to save note. Try again!");
+        alert("⚠️ FAILED TO SAVE! Error: " + err.message);
         document.getElementById('sub-btn').innerText = "DROP NOTE";
       }
     }
