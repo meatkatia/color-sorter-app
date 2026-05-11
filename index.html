@@ -4,7 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Color Sorter</title>
   <style>
-    /* Full-screen reset */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -16,8 +15,6 @@
       overflow-x: hidden;
       text-align: center;
     }
-
-    /* Functional, minimal typography */
     h1 { 
       font-size: 8vw; 
       text-transform: uppercase;
@@ -25,12 +22,10 @@
       letter-spacing: -1px;
       padding: 6vh 20px 3vh; 
     }
-
-    /* Purely functional, massive button */
     input[type='file'] { 
       appearance: none;
       -webkit-appearance: none;
-      width: 90vw; /* Take up most of the screen width */
+      width: 90vw; 
       max-width: 400px;
       padding: 2.5vh 0;
       font-size: 5vw;
@@ -44,44 +39,35 @@
       border-radius: 4px;
       display: block;
     }
-
-    /* Strict 3-column grid */
     #gallery { 
       display: grid;
-      /* The magic line: Forces exactly 3 equal columns */
       grid-template-columns: repeat(3, 1fr); 
-      gap: 4px; /* Tiny gap for maximum density */
-      padding: 0 4px 10vh; /* Padding matches gap to keep edges even */
+      gap: 4px; 
+      padding: 0 4px 10vh; 
       width: 100vw;
       flex-grow: 1;
       overflow-y: auto;
     }
-
-    /* Minimalist card structure */
     .photo-card { 
-      background: #111; /* Very dark background to blend with black body */
-      position: relative; /* Allows positioning the swatch over the image */
-      aspect-ratio: 1; /* Keeps images perfectly square */
+      background: #111; 
+      position: relative; 
+      aspect-ratio: 1; 
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* Keeps image inside borders */
+      overflow: hidden; 
     }
-
-    /* Image fills the square completely */
     img { 
       width: 100%; 
       height: 100%; 
       object-fit: cover; 
     }
-    
-    /* Prominent color swatch overlay */
     .color-swatch {
-      position: absolute; /* Float over the image */
-      bottom: 0; /* Attach to bottom */
+      position: absolute; 
+      bottom: 0; 
       left: 0;
-      width: 100%; /* Full width of the picture */
-      height: 20%; /* Significant strip at the bottom */
-      border-top: 1px solid rgba(255,255,255,0.2); /* Subtle separation line */
+      width: 100%; 
+      height: 20%; 
+      border-top: 1px solid rgba(255,255,255,0.2); 
     }
   </style>
   
@@ -90,43 +76,79 @@
 <body>
 
   <h1>Color Sorter</h1>
-  
   <input type="file" id="photo-upload" accept="image/*" multiple>
-  
   <div id="gallery"></div>
 
   <script>
     const uploadButton = document.getElementById('photo-upload');
     const gallery = document.getElementById('gallery');
-    
     const colorThief = new ColorThief();
 
-    uploadButton.addEventListener('change', function(event) {
-      gallery.innerHTML = ''; 
-      const files = event.target.files;
+    // Math function to turn Red, Green, Blue into a "Rainbow Number" (Hue)
+    function getHue(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h;
+      if (max == min) return 0; // It's black, white, or gray
+      const d = max - min;
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      return (h / 6) * 360;
+    }
 
+    uploadButton.addEventListener('change', async function(event) {
+      gallery.innerHTML = '<h2 style="grid-column: span 3; margin-top: 20px;">Processing...</h2>'; 
+      const files = Array.from(event.target.files);
+      const processedPhotos = [];
+
+      // Step 1: Look at every photo and extract the color data
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const imageUrl = URL.createObjectURL(file);
         
+        // We have to wait for the image to load in the background to read its colors
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.src = imageUrl;
+          img.onload = function() {
+            const dominantColor = colorThief.getColor(img);
+            const hue = getHue(dominantColor[0], dominantColor[1], dominantColor[2]);
+            
+            // Save all this info into a list
+            processedPhotos.push({
+              url: imageUrl,
+              rgb: dominantColor,
+              hue: hue
+            });
+            resolve();
+          };
+        });
+      }
+
+      // Step 2: Sort the list by the Rainbow Number (Hue)
+      processedPhotos.sort((a, b) => a.hue - b.hue);
+
+      // Step 3: Draw the sorted photos onto the screen
+      gallery.innerHTML = ''; // Clear the "Processing..." text
+      
+      processedPhotos.forEach(photo => {
         const card = document.createElement('div');
         card.className = 'photo-card';
 
         const img = document.createElement('img');
-        img.src = imageUrl;
+        img.src = photo.url;
         
         const swatch = document.createElement('div');
         swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = `rgb(${photo.rgb[0]}, ${photo.rgb[1]}, ${photo.rgb[2]})`;
 
         card.appendChild(img);
         card.appendChild(swatch);
         gallery.appendChild(card);
-
-        img.onload = function() {
-          const dominantColor = colorThief.getColor(img);
-          swatch.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
-        };
-      }
+      });
     });
   </script>
 
