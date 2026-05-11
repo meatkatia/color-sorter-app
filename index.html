@@ -271,13 +271,18 @@
           })
         });
 
-        if (!res.ok) throw new Error("Save failed");
+        // TRUTH TELLER ALARM: This forces Supabase to print the exact reason it is rejecting the save
+        if (!res.ok) {
+            var errorDetails = await res.text();
+            throw new Error(errorDetails);
+        }
 
         msgInput.value = '';
         btn.innerText = "DROP NOTE";
         window.fetchNotes();
       } catch (err) {
-        alert("⚠️ FAILED TO SAVE! Check your connection.");
+        // This will print the raw database error to your screen
+        alert("⚠️ SUPABASE REJECTED IT! Reason: " + err.message);
         btn.innerText = "DROP NOTE";
       }
     };
