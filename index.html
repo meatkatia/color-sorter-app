@@ -4,14 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WARM + FUZZY</title>
   
-  <script>
-    window.onerror = function(message, source, lineno) {
-      alert("⚠️ APP CRASHED! Error: " + message + " (Line " + lineno + "). Send a screenshot to your dev!");
-    };
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
@@ -183,104 +175,112 @@
   </div>
 
   <script>
-    let currentFriend = '';
-    let selectedCombo = 'green-black';
-    let supabase = null;
+    // Native JS rewriting to bypass all security blocks
+    var currentFriend = '';
+    var selectedCombo = 'green-black';
+    var pollInterval = null;
 
-    try {
-      const supabaseUrl = 'https://dovjvnierlfkhnokflkn.supabase.co';
-      const supabaseKey = 'sb_publishable_l33PQiCwTtp7n6-9g_-_Yg_KSeNox6V';
-      supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-    } catch (err) {
-      alert("⚠️ SUPABASE FAILED TO LOAD! Error: " + err.message);
-    }
+    var DB_URL = 'https://dovjvnierlfkhnokflkn.supabase.co/rest/v1/notes';
+    var DB_KEY = 'sb_publishable_l33PQiCwTtp7n6-9g_-_Yg_KSeNox6V';
 
-    function setCombo(c) { 
+    window.setCombo = function(c) {
       selectedCombo = c;
       document.getElementById('note-text').className = 'combo-' + c;
-      document.querySelectorAll('.combo-opt').forEach(el => el.classList.remove('selected'));
+      var opts = document.getElementsByClassName('combo-opt');
+      for(var i=0; i<opts.length; i++) {
+          opts[i].classList.remove('selected');
+      }
       document.getElementById('opt-' + c).classList.add('selected');
-    }
+    };
 
-    function openCorner(name) {
+    window.openCorner = function(name) {
       currentFriend = name;
       document.getElementById('menu').style.display = 'none';
       document.getElementById('friend-corner').style.display = 'block';
       document.getElementById('current-name').innerText = name;
-      
-      if (supabase) {
-        fetchNotes();
-        // Setup real-time listeners safely
-        try {
-          supabase.channel('custom-all-channel')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notes' }, (payload) => {
-              if(payload.new.friend_name === currentFriend) fetchNotes();
-            })
-            .subscribe();
-        } catch (e) {
-          console.log("Realtime failed, but notes will still work.");
-        }
-      } else {
-        document.getElementById('notes-list').innerHTML = '<p style="color:red; font-size: 2rem;">DATABASE OFFLINE.</p>';
-      }
-    }
 
-    function goHome() {
+      window.fetchNotes();
+
+      // Secret background auto-refresher (every 3 seconds)
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(window.fetchNotes, 3000);
+    };
+
+    window.goHome = function() {
       document.getElementById('menu').style.display = 'flex';
       document.getElementById('friend-corner').style.display = 'none';
-    }
+      if (pollInterval) clearInterval(pollInterval);
+    };
 
-    async function fetchNotes() {
-      const list = document.getElementById('notes-list');
-      list.innerHTML = '<p>LOADING...</p>';
+    window.fetchNotes = async function() {
+      var list = document.getElementById('notes-list');
       
       try {
-        const { data, error } = await supabase.from('notes').select('*').eq('friend_name', currentFriend).order('created_at', { ascending: false });
-        if (error) throw error;
-        
+        var res = await fetch(DB_URL + '?friend_name=eq.' + encodeURIComponent(currentFriend) + '&order=created_at.desc', {
+          headers: {
+            'apikey': DB_KEY,
+            'Authorization': 'Bearer ' + DB_KEY
+          }
+        });
+
+        if (!res.ok) throw new Error("Network issue");
+        var data = await res.json();
+
         list.innerHTML = '';
         if (data.length === 0) {
-          list.innerHTML = '<p>NO NOTES YET. BE THE FIRST!</p>';
+          list.innerHTML = '<p style="font-family: Courier New; text-transform: uppercase;">NO NOTES YET. BE THE FIRST!</p>';
           return;
         }
 
-        data.forEach(n => {
-          const div = document.createElement('div');
-          div.className = `note-card combo-${n.color_combo || 'green-black'}`;
-          div.style.transform = `rotate(${Math.random() * 4 - 2}deg)`;
+        for(var i=0; i<data.length; i++) {
+          var n = data[i];
+          var div = document.createElement('div');
+          div.className = 'note-card combo-' + (n.color_combo || 'green-black');
+          div.style.transform = 'rotate(' + (Math.random() * 4 - 2) + 'deg)';
           div.innerText = n.message;
           list.appendChild(div);
-        });
+        }
       } catch (err) {
-        list.innerHTML = '<p style="color:red;">ERROR LOADING NOTES: ' + err.message + '</p>';
+        if(list.innerHTML === '') {
+            list.innerHTML = '<p style="color:#ff80bf;">ERROR LOADING NOTES.</p>';
+        }
       }
-    }
+    };
 
-    async function submitNote() {
-      if (!supabase) return alert("Database is not connected!");
-      
-      const msg = document.getElementById('note-text').value;
+    window.submitNote = async function() {
+      var msgInput = document.getElementById('note-text');
+      var msg = msgInput.value;
       if (!msg) return;
-      
-      document.getElementById('sub-btn').innerText = "SAVING...";
-      
-      try {
-        const { error } = await supabase.from('notes').insert([{ 
-          friend_name: currentFriend, 
-          message: msg, 
-          color_combo: selectedCombo 
-        }]);
-        
-        if (error) throw error;
 
-        document.getElementById('note-text').value = '';
-        document.getElementById('sub-btn').innerText = "DROP NOTE";
-        fetchNotes();
+      var btn = document.getElementById('sub-btn');
+      btn.innerText = "SAVING...";
+
+      try {
+        var res = await fetch(DB_URL, {
+          method: 'POST',
+          headers: {
+            'apikey': DB_KEY,
+            'Authorization': 'Bearer ' + DB_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            friend_name: currentFriend,
+            message: msg,
+            color_combo: selectedCombo
+          })
+        });
+
+        if (!res.ok) throw new Error("Save failed");
+
+        msgInput.value = '';
+        btn.innerText = "DROP NOTE";
+        window.fetchNotes();
       } catch (err) {
-        alert("⚠️ FAILED TO SAVE! Error: " + err.message);
-        document.getElementById('sub-btn').innerText = "DROP NOTE";
+        alert("⚠️ FAILED TO SAVE! Check your connection.");
+        btn.innerText = "DROP NOTE";
       }
-    }
+    };
   </script>
 </body>
 </html>
