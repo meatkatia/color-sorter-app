@@ -4,11 +4,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Color Sorter</title>
   <style>
-    /* This makes your app look neat and tidy */
-    body { font-family: sans-serif; padding: 20px; }
-    img { width: 100px; height: 100px; object-fit: cover; margin: 5px; border-radius: 8px; }
-    #gallery { display: flex; flex-wrap: wrap; margin-top: 20px; }
+    body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
+    h1 { font-size: 24px; }
+    #gallery { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; }
+    
+    /* We are making a cute little "polaroid" card for each photo */
+    .photo-card { 
+      background: white; 
+      padding: 10px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+    
+    /* This will be the little circle showing the extracted color */
+    .color-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-top: 10px;
+      border: 2px solid #e0e0e0;
+    }
   </style>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 </head>
 <body>
 
@@ -19,32 +41,45 @@
   <div id="gallery"></div>
 
   <script>
-    // 1. Grab the button and the gallery area
     const uploadButton = document.getElementById('photo-upload');
     const gallery = document.getElementById('gallery');
+    
+    // 2. We turn the Color Thief brain on
+    const colorThief = new ColorThief();
 
-    // 2. Tell the app to listen for when you select photos
     uploadButton.addEventListener('change', function(event) {
-      
-      // Clear the gallery so old photos disappear when you upload new ones
       gallery.innerHTML = ''; 
-      
-      // Get the list of photos you just picked
       const files = event.target.files;
 
-      // 3. Loop through every single photo you selected
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
-        // Create a temporary link to the photo so the browser can see it
         const imageUrl = URL.createObjectURL(file);
         
-        // Create a new image element
+        // Make the polaroid card
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+
+        // Make the image
         const img = document.createElement('img');
         img.src = imageUrl;
         
-        // Put the image onto the screen!
-        gallery.appendChild(img);
+        // Make the empty color circle
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+
+        // Put them all together on the screen
+        card.appendChild(img);
+        card.appendChild(swatch);
+        gallery.appendChild(card);
+
+        // 3. THE MAGIC: Once the image finishes loading, steal its color!
+        img.onload = function() {
+          // Get the dominant color (it spits out 3 numbers: Red, Green, and Blue)
+          const dominantColor = colorThief.getColor(img);
+          
+          // Paint our little swatch circle with that exact color!
+          swatch.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+        };
       }
     });
   </script>
