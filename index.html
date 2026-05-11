@@ -5,62 +5,239 @@
   <title>WARM & FUZZY</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    /* THE NEO-BRUTALIST RESET */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: "Courier New", Courier, monospace;
-      background-color: #e8e8e8; 
-      color: #000;
+      /* Using system heavy fonts to mimic that stretched, tight look */
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      background-color: #050505; /* Pitch black */
+      color: #ccff00; /* Acid green default */
       padding: 15px;
       overflow-x: hidden;
-    }
-
-    h1 { 
-      font-size: 18vw; 
       text-transform: uppercase;
-      font-weight: 900;
-      letter-spacing: -3px;
-      line-height: 0.8;
-      margin-bottom: 20px;
-      transform: rotate(-1deg);
     }
 
-    #menu { display: flex; flex-direction: column; gap: 15px; }
+    /* MASSIVE TYPOGRAPHY */
+    h1 { 
+      font-size: 22vw; /* Absurdly large */
+      font-weight: 900;
+      letter-spacing: -0.05em; /* Extremely tight tracking like the refs */
+      line-height: 0.8;
+      margin-top: 2vh;
+      margin-bottom: 5vh;
+      text-align: center;
+      color: #ff80bf; /* Bubblegum pink */
+    }
 
+    #menu { display: flex; flex-direction: column; gap: 20px; padding-bottom: 50px; }
+
+    /* HARSH, HEAVY BUTTONS */
     .friend-btn {
       width: 100%;
-      padding: 30px 10px;
-      font-size: 3.5rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      border: 10px solid #000;
-      box-shadow: 15px 15px 0px #000;
+      padding: 25px 10px;
+      font-size: 12vw;
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      letter-spacing: -2px;
+      border: none;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 0; /* No soft corners */
+      transition: transform 0.1s;
     }
+    
+    .friend-btn:active { transform: scale(0.98); }
 
-    #btn-Evvie { background: #FF00FF; color: #fff; }
-    #btn-Joe-C { background: #FFFF00; }
-    #btn-Joe-L { background: #00FF00; }
-    #btn-Perdi { background: #0000FF; color: #fff; }
-    #btn-Katia { background: #FF0000; color: #fff; }
+    /* The new color palette based on your images */
+    #btn-Evvie { background: #ccff00; color: #050505; } /* Acid Green */
+    #btn-Joe-C { background: #ff80bf; color: #050505; } /* Pink */
+    #btn-Joe-L { background: #ffffff; color: #050505; } /* White */
+    #btn-Perdi { background: #050505; color: #ccff00; border: 4px solid #ccff00; } /* Inverted Green */
+    #btn-Katia { background: #050505; color: #ff80bf; border: 4px solid #ff80bf; } /* Inverted Pink */
 
     #friend-corner { display: none; }
     
     .back-btn {
-      background: #000;
-      color: #fff;
-      padding: 10px 20px;
-      font-weight: bold;
+      background: transparent;
+      color: #ffffff;
+      padding: 10px 0;
+      font-size: 6vw;
+      font-family: 'Impact', 'Arial Black', sans-serif;
       border: none;
       margin-bottom: 20px;
-      text-transform: uppercase;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    #current-name {
+      font-size: 15vw; 
+      letter-spacing: -3px; 
+      margin-bottom: 20px;
+      color: #ffffff;
+      line-height: 1;
     }
 
     /* COLOR COMBO PICKER */
     .color-picker {
       display: flex;
-      gap: 10px;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .combo-opt {
+      flex: 1;
+      height: 50px;
+      cursor: pointer;
+      border: 2px solid #333;
+    }
+
+    /* THE THEMES (Directly from your refs) */
+    .combo-neo-green { background: #ccff00; color: #1a2600; border-color: #ccff00; } /* Macbook Neo */
+    .combo-create-pink { background: #050505; color: #ff80bf; border-color: #ff80bf; } /* Make It Create */
+    .combo-drop-pink { background: #ff80bf; color: #b30059; border-color: #ff80bf; } /* Neo Nee-Doh */
+    .combo-metal-white { background: #050505; color: #ffffff; border-color: #ffffff; } /* Mac Students */
+    .combo-invert { background: #ffffff; color: #050505; border-color: #ffffff; }
+
+    /* NOTES GRID */
+    #notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .note-card {
+      padding: 25px;
+      font-size: 1.5rem;
+      font-family: 'Courier New', Courier, monospace; /* Typewriter contrast for the actual notes */
+      font-weight: bold;
+      border: 2px solid transparent; /* Placeholder for combos that need borders */
+    }
+
+    /* SPECIFIC BORDER OVERRIDES FOR DARK THEMES */
+    .note-card.combo-create-pink { border-color: #ff80bf; }
+    .note-card.combo-metal-white { border-color: #ffffff; }
+
+    /* TEXT AREA FOR WRITING */
+    textarea {
+      width: 100%; height: 150px;
+      padding: 20px; 
+      font-size: 1.5rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-radius: 0;
+      resize: none;
+    }
+
+    textarea:focus { outline: none; }
+
+    .submit-btn {
+      width: 100%; padding: 25px;
+      font-size: 8vw; 
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      letter-spacing: -1px;
+      background: #ccff00;
+      color: #050505;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menu">
+    <h1>WARM<br>FUZZY</h1>
+    <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
+    <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
+    <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
+    <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
+    <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
+  </div>
+
+  <div id="friend-corner">
+    <button class="back-btn" onclick="goHome()">← BACK TO SQUAD</button>
+    <h2 id="current-name">NAME</h2>
+    
+    <div class="color-picker" id="picker">
+      <div class="combo-opt combo-neo-green" onclick="setCombo('neo-green')"></div>
+      <div class="combo-opt combo-create-pink" onclick="setCombo('create-pink')"></div>
+      <div class="combo-opt combo-drop-pink" onclick="setCombo('drop-pink')"></div>
+      <div class="combo-opt combo-metal-white" onclick="setCombo('metal-white')"></div>
+      <div class="combo-opt combo-invert" onclick="setCombo('invert')"></div>
+    </div>
+    
+    <textarea id="note-text" class="combo-neo-green" placeholder="SAY SOMETHING NICE..."></textarea>
+    <button class="submit-btn" id="sub-btn" onclick="submitNote()">DROP NOTE</button>
+
+    <div id="notes-list"></div>
+  </div>
+
+  <script>
+    // --- STOP! PASTE YOUR URL AND KEY BELOW ---
+    const supabaseUrl = 'YOUR_URL_HERE';
+    const supabaseKey = 'YOUR_KEY_HERE';
+    // ------------------------------------------
+
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let currentFriend = '';
+    let selectedCombo = 'neo-green';
+
+    function setCombo(c) { 
+      selectedCombo = c;
+      document.getElementById('note-text').className = 'combo-' + c;
+    }
+
+    async function openCorner(name) {
+      currentFriend = name;
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('friend-corner').style.display = 'block';
+      document.getElementById('current-name').innerText = name;
+      fetchNotes();
+
+      supabase.channel('custom-all-channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notes' }, (payload) => {
+          if(payload.new.friend_name === currentFriend) fetchNotes();
+        })
+        .subscribe();
+    }
+
+    function goHome() {
+      document.getElementById('menu').style.display = 'flex';
+      document.getElementById('friend-corner').style.display = 'none';
+    }
+
+    async function fetchNotes() {
+      const { data } = await supabase.from('notes').select('*').eq('friend_name', currentFriend).order('created_at', { ascending: false });
+      const list = document.getElementById('notes-list');
+      list.innerHTML = '';
+      data.forEach(n => {
+        const div = document.createElement('div');
+        // Apply the saved color combo, default to green if missing
+        div.className = `note-card combo-${n.color_combo || 'neo-green'}`;
+        div.innerText = n.message;
+        list.appendChild(div);
+      });
+    }
+
+    async function submitNote() {
+      const msg = document.getElementById('note-text').value;
+      if (!msg) return;
+      document.getElementById('sub-btn').innerText = "SAVING...";
+      
+      await supabase.from('notes').insert([{ 
+        friend_name: currentFriend, 
+        message: msg, 
+        color_combo: selectedCombo 
+      }]);
+      
+      document.getElementById('note-text').value = '';
+      document.getElementById('sub-btn').innerText = "DROP NOTE";
+    }
+  </script>
+</body>
+</html>      gap: 10px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
