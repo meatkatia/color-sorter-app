@@ -2,302 +2,235 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Color Sorter Pro</title>
+  <title>WARM & FUZZY</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
+    /* IGNORANT, BASQUIAT, SCRAPBOOK STYLING */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background-color: #000; 
-      color: #fff;
-      min-height: 100vh;
+      font-family: "Courier New", Courier, monospace; /* Typewriter/Scrapbook feel */
+      background-color: #f0f0f0; 
+      color: #000;
+      padding: 20px;
       overflow-x: hidden;
-      transition: background 1.5s ease-in-out; 
-    }
-
-    .header {
-      text-align: center;
-      padding: 6vh 20px 3vh;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     h1 { 
-      font-size: 8vw; 
+      font-size: 14vw; 
       text-transform: uppercase;
       font-weight: 900;
-      letter-spacing: -1px;
-      margin-bottom: 15px;
+      letter-spacing: -2px;
+      line-height: 0.9;
+      margin-bottom: 30px;
+      transform: rotate(-2deg); /* Slightly crooked */
     }
 
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      width: 90vw;
-      max-width: 500px;
-      margin: 0 auto;
-    }
+    /* The Main Menu Grid */
+    #menu { display: flex; flex-direction: column; gap: 20px; }
 
-    /* Primary upload button */
-    .btn-primary {
-      position: relative;
-      flex-grow: 1;
+    /* Massive, chunky buttons */
+    .friend-btn {
+      width: 100%;
+      padding: 25px 10px;
+      font-size: 3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      border: 8px solid #000; /* Extremely thick borders */
       background: #fff;
-      color: #000;
-      padding: 15px 0;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 4px;
-      border: none;
       cursor: pointer;
-      overflow: hidden;
+      box-shadow: 12px 12px 0px #000; /* Harsh, solid drop shadow */
+      transition: transform 0.1s;
+      /* Weird, uneven border radius to look hand-cut */
+      border-radius: 2px 15px 4px 20px; 
+    }
+    .friend-btn:active {
+      transform: translate(8px, 8px);
+      box-shadow: 4px 4px 0px #000;
     }
 
-    /* The actual file input is invisible and stretched over the button */
-    .btn-primary input[type='file'] {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      opacity: 0;
-      cursor: pointer;
+    /* Hardcoded colors for the squad */
+    #btn-Evvie { background-color: #FF00FF; color: white; } /* Neon Pink */
+    #btn-Joe-C { background-color: #FFFF00; } /* Harsh Yellow */
+    #btn-Joe-L { background-color: #00FF00; } /* Lime Green */
+    #btn-Perdi { background-color: #0000FF; color: white; } /* Deep Blue */
+    #btn-Katia { background-color: #FF0000; color: white; } /* Bright Red */
+
+    /* The individual friend's page (hidden by default) */
+    #friend-corner { display: none; }
+    
+    #current-friend-name {
+      font-size: 4rem;
+      font-weight: 900;
+      background: #000;
+      color: #fff;
+      display: inline-block;
+      padding: 10px 20px;
+      transform: rotate(3deg);
+      margin-bottom: 30px;
     }
 
-    /* Secondary clear button */
-    .btn-danger {
-      background: #333;
-      color: #ff4444;
-      padding: 0 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    }
-
-    #status {
-      margin-top: 15px;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    #gallery { 
+    /* The Notes Display */
+    #notes-list {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100vw;
-      padding-bottom: 10vh; 
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 40px;
     }
 
-    .photo-card { 
-      flex: 1 1 33%; 
-      min-width: 100px;
-      aspect-ratio: 1; 
-      margin: -1px; 
-      position: relative; 
-      overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0.3s;
-      z-index: 1;
+    .note-card {
+      background: #fff;
+      border: 5px solid #000;
+      padding: 20px;
+      font-size: 1.5rem;
+      font-family: sans-serif;
+      font-weight: bold;
+      box-shadow: 6px 6px 0px #000;
+      border-radius: 10px 2px 10px 2px;
+      transform: rotate(-1deg);
     }
 
-    .photo-card:hover {
-      transform: scale(1.05);
-      z-index: 10;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    /* The form to leave a note */
+    textarea {
+      width: 100%;
+      height: 150px;
+      border: 6px solid #000;
+      padding: 15px;
+      font-size: 1.5rem;
+      font-family: "Courier New", Courier, monospace;
+      margin-bottom: 10px;
+      box-shadow: 8px 8px 0px #000;
+      resize: none;
     }
 
-    img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      border: 1px solid rgba(0,0,0,0.1); 
+    .submit-btn, .back-btn {
+      width: 100%;
+      padding: 20px;
+      font-size: 2rem;
+      font-weight: 900;
+      border: 6px solid #000;
+      cursor: pointer;
+      box-shadow: 8px 8px 0px #000;
+      margin-bottom: 20px;
+      text-transform: uppercase;
     }
+    .submit-btn { background: #00FF00; } /* Green submit */
+    .back-btn { background: #fff; }
+
   </style>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Color Sorter</h1>
-    <div class="controls">
-      <div class="btn-primary">
-        Add Photos
-        <input type="file" id="photo-upload" accept="image/*" multiple>
-      </div>
-      <button class="btn-danger" id="clear-btn">Clear</button>
-    </div>
-    <div id="status">Loading memory...</div>
+  <div id="menu">
+    <h1>WARM<br>& FUZZY</h1>
+    <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
+    <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
+    <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
+    <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
+    <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
   </div>
-  
-  <div id="gallery"></div>
+
+  <div id="friend-corner">
+    <button class="back-btn" onclick="goHome()">Back</button>
+    <h2 id="current-friend-name">NAME</h2>
+    
+    <div id="notes-list">
+      </div>
+
+    <textarea id="new-note-text" placeholder="LEAVE A NOTE..."></textarea>
+    <button class="submit-btn" onclick="submitNote()">DROP NOTE</button>
+  </div>
 
   <script>
-    const uploadButton = document.getElementById('photo-upload');
-    const clearButton = document.getElementById('clear-btn');
-    const gallery = document.getElementById('gallery');
-    const statusText = document.getElementById('status');
-    const colorThief = new ColorThief();
+    // --- 1. CONNECT TO SUPABASE ---
+    // PASTE YOUR URL AND KEY HERE:
+    const supabaseUrl = 'YOUR_SUPABASE_URL_HERE';
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // --- DATABASE SETUP (IndexedDB) ---
-    let db;
-    const request = indexedDB.open("ColorSorterDB", 1);
+    // --- 2. APP STATE ---
+    let currentFriend = '';
 
-    request.onupgradeneeded = function(event) {
-      db = event.target.result;
-      // Create a table called 'photos' with an auto-incrementing ID
-      db.createObjectStore("photos", { keyPath: "id", autoIncrement:true });
-    };
-
-    request.onsuccess = function(event) {
-      db = event.target.result;
-      loadPhotosFromMemory(); // Load photos as soon as the app opens!
-    };
-
-    // --- THE MATH & LOGIC ---
-    function getHue(r, g, b) {
-      r /= 255; g /= 255; b /= 255;
-      const max = Math.max(r, g, b), min = Math.min(r, g, b);
-      let h;
-      if (max == min) return 0; 
-      const d = max - min;
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      return (h / 6) * 360;
+    // --- 3. NAVIGATION ---
+    function openCorner(name) {
+      currentFriend = name;
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('friend-corner').style.display = 'block';
+      document.getElementById('current-friend-name').innerText = name;
+      
+      // Load their notes immediately
+      fetchNotes();
     }
 
-    // --- THE SHRINKING MACHINE (Canvas) ---
-    function compressImage(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_SIZE = 150; // Squish it down to 150 pixels
-            let width = img.width;
-            let height = img.height;
-
-            if (width > height) {
-              if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
-            } else {
-              if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            // Turn it into a tiny JPEG string
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-            resolve({ dataUrl: compressedDataUrl, imgElement: img });
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
+    function goHome() {
+      document.getElementById('menu').style.display = 'flex';
+      document.getElementById('friend-corner').style.display = 'none';
+      document.getElementById('new-note-text').value = ''; // clear input
     }
 
-    // --- SAVING AND LOADING ---
-    uploadButton.addEventListener('change', async function(event) {
-      const files = Array.from(event.target.files);
-      if(files.length === 0) return;
-      
-      statusText.innerText = `Processing ${files.length} photos... Please wait.`;
-      
-      for (let i = 0; i < files.length; i++) {
-        // 1. Shrink it
-        const { dataUrl, imgElement } = await compressImage(files[i]);
-        
-        // 2. Steal color (needs to wait for the image to be fully ready)
-        await new Promise(resolve => {
-            const tempImg = new Image();
-            tempImg.src = dataUrl;
-            tempImg.onload = () => {
-                const rgb = colorThief.getColor(tempImg);
-                const hue = getHue(rgb[0], rgb[1], rgb[2]);
-                
-                // 3. Save to Database
-                const transaction = db.transaction(["photos"], "readwrite");
-                const store = transaction.objectStore("photos");
-                store.add({ url: dataUrl, rgb: rgb, hue: hue });
-                resolve();
-            }
-        });
-        
-        // Update the user on progress
-        if(i % 5 === 0) statusText.innerText = `Processed ${i + 1} of ${files.length}...`;
+    // --- 4. FETCH NOTES FROM CLOUD ---
+    async function fetchNotes() {
+      const notesList = document.getElementById('notes-list');
+      notesList.innerHTML = '<p style="font-weight:bold; font-size: 1.5rem;">LOADING...</p>';
+
+      const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .eq('friend_name', currentFriend)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        notesList.innerHTML = '<p>ERROR LOADING NOTES.</p>';
+        return;
       }
 
-      // 4. Reload everything from memory
-      uploadButton.value = ''; // Reset the input
-      loadPhotosFromMemory();
-    });
+      notesList.innerHTML = ''; // clear loading text
 
-    function loadPhotosFromMemory() {
-      const transaction = db.transaction(["photos"], "readonly");
-      const store = transaction.objectStore("photos");
-      const request = store.getAll();
-
-      request.onsuccess = function(event) {
-        let savedPhotos = event.target.result;
-        
-        if (savedPhotos.length === 0) {
-          gallery.innerHTML = '';
-          document.body.style.background = '#000';
-          statusText.innerText = 'Memory is empty. Add some photos!';
-          return;
-        }
-
-        statusText.innerText = `${savedPhotos.length} photos in memory.`;
-
-        // Sort by hue
-        savedPhotos.sort((a, b) => a.hue - b.hue);
-
-        // Draw background gradient
-        let gradientColors = [];
-        let step = Math.max(1, Math.floor(savedPhotos.length / 5));
-        for(let i = 0; i < savedPhotos.length; i += step) {
-          gradientColors.push(`rgb(${savedPhotos[i].rgb[0]}, ${savedPhotos[i].rgb[1]}, ${savedPhotos[i].rgb[2]})`);
-        }
-        let lastRgb = savedPhotos[savedPhotos.length - 1].rgb;
-        gradientColors.push(`rgb(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]})`);
-        document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
-
-        // Draw grid
-        gallery.innerHTML = ''; 
-        savedPhotos.forEach(photo => {
+      if (data.length === 0) {
+        notesList.innerHTML = '<p style="font-weight:bold; font-size: 1.5rem;">NO NOTES YET. BE THE FIRST.</p>';
+      } else {
+        data.forEach(note => {
           const card = document.createElement('div');
-          card.className = 'photo-card';
-          const img = document.createElement('img');
-          img.src = photo.url;
-          card.appendChild(img);
-          gallery.appendChild(card);
+          card.className = 'note-card';
+          // Add a random slight rotation to make it feel messy
+          const randomRot = Math.random() * 4 - 2; 
+          card.style.transform = `rotate(${randomRot}deg)`;
+          card.innerText = note.message;
+          notesList.appendChild(card);
         });
-      };
+      }
     }
 
-    // --- CLEAR MEMORY ---
-    clearButton.addEventListener('click', () => {
-      if(confirm("Are you sure you want to delete all photos from the app's memory?")) {
-        const transaction = db.transaction(["photos"], "readwrite");
-        const store = transaction.objectStore("photos");
-        store.clear().onsuccess = () => {
-          loadPhotosFromMemory();
-        };
-      }
-    });
+    // --- 5. SUBMIT A NEW NOTE ---
+    async function submitNote() {
+      const textInput = document.getElementById('new-note-text');
+      const message = textInput.value.trim();
 
+      if (message === '') return; // Don't submit empty notes
+
+      // Change button text while it saves
+      const btn = document.querySelector('.submit-btn');
+      btn.innerText = 'SAVING...';
+
+      const { error } = await supabase
+        .from('notes')
+        .insert([
+          { friend_name: currentFriend, message: message }
+        ]);
+
+      if (!error) {
+        textInput.value = ''; // Clear the box
+        fetchNotes(); // Reload the list so the new note appears!
+      } else {
+        alert("Wait, something went wrong saving that.");
+      }
+
+      btn.innerText = 'DROP NOTE';
+    }
   </script>
+
 </body>
 </html>
