@@ -2,26 +2,22 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Color Sorter</title>
+  <title>Color Sorter Pro</title>
   <style>
-    /* Full-screen reset */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background-color: #000; /* Starts pitch black */
+      background-color: #000; 
       color: #fff;
       min-height: 100vh;
       overflow-x: hidden;
-      /* This makes the background smoothly fade into the new colors */
       transition: background 1.5s ease-in-out; 
     }
 
-    /* We put the title and button in a sticky header so you can scroll the photos but always upload more */
     .header {
       text-align: center;
-      padding: 8vh 20px 4vh;
-      /* Semi-transparent background with a blur so the gradient shows through */
+      padding: 6vh 20px 3vh;
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -36,50 +32,80 @@
       text-transform: uppercase;
       font-weight: 900;
       letter-spacing: -1px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    input[type='file'] { 
-      appearance: none;
-      -webkit-appearance: none;
-      width: 90vw; 
-      max-width: 400px;
-      padding: 15px 0;
-      font-size: 1.2rem;
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 90vw;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Primary upload button */
+    .btn-primary {
+      position: relative;
+      flex-grow: 1;
       background: #fff;
       color: #000;
-      border: none;
-      cursor: pointer;
+      padding: 15px 0;
+      font-size: 1.2rem;
       font-weight: bold;
       text-transform: uppercase;
       border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
     }
 
-    /* The Moodboard Grid */
+    /* The actual file input is invisible and stretched over the button */
+    .btn-primary input[type='file'] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Secondary clear button */
+    .btn-danger {
+      background: #333;
+      color: #ff4444;
+      padding: 0 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
     #gallery { 
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      /* Remove padding to let images hit the absolute edge of the screen */
       width: 100vw;
-      padding-bottom: 10vh; /* space at the very bottom */
+      padding-bottom: 10vh; 
     }
 
     .photo-card { 
-      /* Flex properties allow them to size dynamically but aim for 3 across */
       flex: 1 1 33%; 
       min-width: 100px;
       aspect-ratio: 1; 
-      /* THE OVERLAP: A negative margin forces the images to bleed into each other */
       margin: -1px; 
       position: relative; 
       overflow: hidden;
-      /* Smooth pop-out effect on hover */
       transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0.3s;
       z-index: 1;
     }
 
-    /* When you tap/hover a photo, it pops slightly above the others */
     .photo-card:hover {
       transform: scale(1.05);
       z-index: 10;
@@ -90,7 +116,6 @@
       width: 100%; 
       height: 100%; 
       object-fit: cover; 
-      /* Slight darkening to the edges of the photo to separate them slightly */
       border: 1px solid rgba(0,0,0,0.1); 
     }
   </style>
@@ -101,16 +126,41 @@
 
   <div class="header">
     <h1>Color Sorter</h1>
-    <input type="file" id="photo-upload" accept="image/*" multiple>
+    <div class="controls">
+      <div class="btn-primary">
+        Add Photos
+        <input type="file" id="photo-upload" accept="image/*" multiple>
+      </div>
+      <button class="btn-danger" id="clear-btn">Clear</button>
+    </div>
+    <div id="status">Loading memory...</div>
   </div>
   
   <div id="gallery"></div>
 
   <script>
     const uploadButton = document.getElementById('photo-upload');
+    const clearButton = document.getElementById('clear-btn');
     const gallery = document.getElementById('gallery');
+    const statusText = document.getElementById('status');
     const colorThief = new ColorThief();
 
+    // --- DATABASE SETUP (IndexedDB) ---
+    let db;
+    const request = indexedDB.open("ColorSorterDB", 1);
+
+    request.onupgradeneeded = function(event) {
+      db = event.target.result;
+      // Create a table called 'photos' with an auto-incrementing ID
+      db.createObjectStore("photos", { keyPath: "id", autoIncrement:true });
+    };
+
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      loadPhotosFromMemory(); // Load photos as soon as the app opens!
+    };
+
+    // --- THE MATH & LOGIC ---
     function getHue(r, g, b) {
       r /= 255; g /= 255; b /= 255;
       const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -125,70 +175,129 @@
       return (h / 6) * 360;
     }
 
-    uploadButton.addEventListener('change', async function(event) {
-      gallery.innerHTML = '<h2 style="width: 100%; margin-top: 40px;">Processing...</h2>'; 
-      const files = Array.from(event.target.files);
-      const processedPhotos = [];
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const imageUrl = URL.createObjectURL(file);
-        
-        await new Promise((resolve) => {
+    // --- THE SHRINKING MACHINE (Canvas) ---
+    function compressImage(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
           const img = new Image();
-          img.src = imageUrl;
-          img.onload = function() {
-            const dominantColor = colorThief.getColor(img);
-            const hue = getHue(dominantColor[0], dominantColor[1], dominantColor[2]);
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 150; // Squish it down to 150 pixels
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+            } else {
+              if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
             
-            processedPhotos.push({
-              url: imageUrl,
-              rgb: dominantColor,
-              hue: hue
-            });
-            resolve();
+            // Turn it into a tiny JPEG string
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            resolve({ dataUrl: compressedDataUrl, imgElement: img });
           };
-        });
-      }
-
-      // Sort by color
-      processedPhotos.sort((a, b) => a.hue - b.hue);
-
-      // --- NEW BACKGROUND GRADIENT LOGIC ---
-      // We sample 5 colors evenly spaced from your sorted list to make the background gradient
-      if (processedPhotos.length > 0) {
-        let gradientColors = [];
-        let step = Math.max(1, Math.floor(processedPhotos.length / 5));
-        
-        for(let i = 0; i < processedPhotos.length; i += step) {
-          let rgb = processedPhotos[i].rgb;
-          gradientColors.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
-        }
-        
-        // Make sure the very last color is included at the bottom
-        let lastRgb = processedPhotos[processedPhotos.length - 1].rgb;
-        gradientColors.push(`rgb(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]})`);
-
-        // Apply it to the background
-        document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
-      }
-
-      // Clear processing text
-      gallery.innerHTML = ''; 
-      
-      // Draw the overlapping moodboard
-      processedPhotos.forEach(photo => {
-        const card = document.createElement('div');
-        card.className = 'photo-card';
-
-        const img = document.createElement('img');
-        img.src = photo.url;
-        
-        card.appendChild(img);
-        gallery.appendChild(card);
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
       });
-    });
-  </script>
+    }
 
+    // --- SAVING AND LOADING ---
+    uploadButton.addEventListener('change', async function(event) {
+      const files = Array.from(event.target.files);
+      if(files.length === 0) return;
+      
+      statusText.innerText = `Processing ${files.length} photos... Please wait.`;
+      
+      for (let i = 0; i < files.length; i++) {
+        // 1. Shrink it
+        const { dataUrl, imgElement } = await compressImage(files[i]);
+        
+        // 2. Steal color (needs to wait for the image to be fully ready)
+        await new Promise(resolve => {
+            const tempImg = new Image();
+            tempImg.src = dataUrl;
+            tempImg.onload = () => {
+                const rgb = colorThief.getColor(tempImg);
+                const hue = getHue(rgb[0], rgb[1], rgb[2]);
+                
+                // 3. Save to Database
+                const transaction = db.transaction(["photos"], "readwrite");
+                const store = transaction.objectStore("photos");
+                store.add({ url: dataUrl, rgb: rgb, hue: hue });
+                resolve();
+            }
+        });
+        
+        // Update the user on progress
+        if(i % 5 === 0) statusText.innerText = `Processed ${i + 1} of ${files.length}...`;
+      }
+
+      // 4. Reload everything from memory
+      uploadButton.value = ''; // Reset the input
+      loadPhotosFromMemory();
+    });
+
+    function loadPhotosFromMemory() {
+      const transaction = db.transaction(["photos"], "readonly");
+      const store = transaction.objectStore("photos");
+      const request = store.getAll();
+
+      request.onsuccess = function(event) {
+        let savedPhotos = event.target.result;
+        
+        if (savedPhotos.length === 0) {
+          gallery.innerHTML = '';
+          document.body.style.background = '#000';
+          statusText.innerText = 'Memory is empty. Add some photos!';
+          return;
+        }
+
+        statusText.innerText = `${savedPhotos.length} photos in memory.`;
+
+        // Sort by hue
+        savedPhotos.sort((a, b) => a.hue - b.hue);
+
+        // Draw background gradient
+        let gradientColors = [];
+        let step = Math.max(1, Math.floor(savedPhotos.length / 5));
+        for(let i = 0; i < savedPhotos.length; i += step) {
+          gradientColors.push(`rgb(${savedPhotos[i].rgb[0]}, ${savedPhotos[i].rgb[1]}, ${savedPhotos[i].rgb[2]})`);
+        }
+        let lastRgb = savedPhotos[savedPhotos.length - 1].rgb;
+        gradientColors.push(`rgb(${lastRgb[0]}, ${lastRgb[1]}, ${lastRgb[2]})`);
+        document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
+
+        // Draw grid
+        gallery.innerHTML = ''; 
+        savedPhotos.forEach(photo => {
+          const card = document.createElement('div');
+          card.className = 'photo-card';
+          const img = document.createElement('img');
+          img.src = photo.url;
+          card.appendChild(img);
+          gallery.appendChild(card);
+        });
+      };
+    }
+
+    // --- CLEAR MEMORY ---
+    clearButton.addEventListener('click', () => {
+      if(confirm("Are you sure you want to delete all photos from the app's memory?")) {
+        const transaction = db.transaction(["photos"], "readwrite");
+        const store = transaction.objectStore("photos");
+        store.clear().onsuccess = () => {
+          loadPhotosFromMemory();
+        };
+      }
+    });
+
+  </script>
 </body>
 </html>
