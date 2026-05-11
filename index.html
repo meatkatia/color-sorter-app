@@ -3,64 +3,204 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WARM & FUZZY</title>
-  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <style>
-    /* IGNORANT, BASQUIAT, SCRAPBOOK STYLING */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      font-family: "Courier New", Courier, monospace; /* Typewriter/Scrapbook feel */
-      background-color: #f0f0f0; 
+      font-family: "Courier New", Courier, monospace;
+      background-color: #e8e8e8; 
       color: #000;
-      padding: 20px;
+      padding: 15px;
       overflow-x: hidden;
     }
 
     h1 { 
-      font-size: 14vw; 
+      font-size: 18vw; 
       text-transform: uppercase;
       font-weight: 900;
-      letter-spacing: -2px;
-      line-height: 0.9;
-      margin-bottom: 30px;
-      transform: rotate(-2deg); /* Slightly crooked */
+      letter-spacing: -3px;
+      line-height: 0.8;
+      margin-bottom: 20px;
+      transform: rotate(-1deg);
     }
 
-    /* The Main Menu Grid */
-    #menu { display: flex; flex-direction: column; gap: 20px; }
+    #menu { display: flex; flex-direction: column; gap: 15px; }
 
-    /* Massive, chunky buttons */
     .friend-btn {
       width: 100%;
-      padding: 25px 10px;
-      font-size: 3rem;
+      padding: 30px 10px;
+      font-size: 3.5rem;
       font-weight: 900;
       text-transform: uppercase;
-      border: 8px solid #000; /* Extremely thick borders */
-      background: #fff;
+      border: 10px solid #000;
+      box-shadow: 15px 15px 0px #000;
       cursor: pointer;
-      box-shadow: 12px 12px 0px #000; /* Harsh, solid drop shadow */
-      transition: transform 0.1s;
-      /* Weird, uneven border radius to look hand-cut */
-      border-radius: 2px 15px 4px 20px; 
-    }
-    .friend-btn:active {
-      transform: translate(8px, 8px);
-      box-shadow: 4px 4px 0px #000;
+      border-radius: 4px;
     }
 
-    /* Hardcoded colors for the squad */
-    #btn-Evvie { background-color: #FF00FF; color: white; } /* Neon Pink */
-    #btn-Joe-C { background-color: #FFFF00; } /* Harsh Yellow */
-    #btn-Joe-L { background-color: #00FF00; } /* Lime Green */
-    #btn-Perdi { background-color: #0000FF; color: white; } /* Deep Blue */
-    #btn-Katia { background-color: #FF0000; color: white; } /* Bright Red */
+    #btn-Evvie { background: #FF00FF; color: #fff; }
+    #btn-Joe-C { background: #FFFF00; }
+    #btn-Joe-L { background: #00FF00; }
+    #btn-Perdi { background: #0000FF; color: #fff; }
+    #btn-Katia { background: #FF0000; color: #fff; }
 
-    /* The individual friend's page (hidden by default) */
     #friend-corner { display: none; }
     
+    .back-btn {
+      background: #000;
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    /* COLOR COMBO PICKER */
+    .color-picker {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .combo-opt {
+      width: 50px; height: 50px;
+      border: 4px solid #000;
+      cursor: pointer;
+    }
+
+    /* NOTES GRID - OVERLAPPING VIBE */
+    #notes-list {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 20px -10px;
+    }
+
+    .note-card {
+      flex: 1 1 45%;
+      margin: -5px; /* THE OVERLAP */
+      padding: 20px;
+      border: 5px solid #000;
+      font-size: 1.2rem;
+      font-weight: bold;
+      min-height: 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Color Combos */
+    .combo-classic { background: #fff; color: #000; }
+    .combo-coffee { background: #1a1a1a; color: #00e5ff; }
+    .combo-lava { background: #1a1a1a; color: #ff4e00; }
+    .combo-rose { background: #ffc0cb; color: #900000; }
+    .combo-acid { background: #ccff00; color: #000; }
+
+    textarea {
+      width: 100%; height: 120px;
+      border: 8px solid #000;
+      padding: 15px; font-size: 1.2rem;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+
+    .submit-btn {
+      width: 100%; padding: 25px;
+      font-size: 2rem; font-weight: 900;
+      border: 8px solid #000;
+      background: #fff;
+      box-shadow: 10px 10px 0px #000;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menu">
+    <h1>WARM<br>& FUZZY</h1>
+    <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
+    <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
+    <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
+    <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
+    <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
+  </div>
+
+  <div id="friend-corner">
+    <button class="back-btn" onclick="goHome()">← BACK</button>
+    <h2 id="current-name" style="font-size: 3rem; text-transform: uppercase; margin-bottom: 20px;">NAME</h2>
+    
+    <div id="notes-list"></div>
+
+    <div class="color-picker" id="picker">
+      <div class="combo-opt combo-classic" onclick="setCombo('classic')"></div>
+      <div class="combo-opt combo-coffee" onclick="setCombo('coffee')"></div>
+      <div class="combo-opt combo-lava" onclick="setCombo('lava')"></div>
+      <div class="combo-opt combo-rose" onclick="setCombo('rose')"></div>
+      <div class="combo-opt combo-acid" onclick="setCombo('acid')"></div>
+    </div>
+    
+    <textarea id="note-text" placeholder="SAY SOMETHING CUTE..."></textarea>
+    <button class="submit-btn" id="sub-btn" onclick="submitNote()">DROP NOTE</button>
+  </div>
+
+  <script>
+    const supabaseUrl = 'YOUR_URL';
+    const supabaseKey = 'YOUR_KEY';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let currentFriend = '';
+    let selectedCombo = 'classic';
+
+    function setCombo(c) { 
+      selectedCombo = c;
+      document.getElementById('note-text').className = 'combo-' + c;
+    }
+
+    async function openCorner(name) {
+      currentFriend = name;
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('friend-corner').style.display = 'block';
+      document.getElementById('current-name').innerText = name;
+      fetchNotes();
+
+      // REAL-TIME: Listen for new notes for this specific friend
+      supabase.channel('custom-all-channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notes' }, (payload) => {
+          if(payload.new.friend_name === currentFriend) fetchNotes();
+        })
+        .subscribe();
+    }
+
+    function goHome() {
+      document.getElementById('menu').style.display = 'flex';
+      document.getElementById('friend-corner').style.display = 'none';
+    }
+
+    async function fetchNotes() {
+      const { data } = await supabase.from('notes').select('*').eq('friend_name', currentFriend).order('created_at', { ascending: false });
+      const list = document.getElementById('notes-list');
+      list.innerHTML = '';
+      data.forEach(n => {
+        const div = document.createElement('div');
+        div.className = `note-card combo-${n.color_combo || 'classic'}`;
+        div.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
+        div.innerText = n.message;
+        list.appendChild(div);
+      });
+    }
+
+    async function submitNote() {
+      const msg = document.getElementById('note-text').value;
+      if (!msg) return;
+      document.getElementById('sub-btn').innerText = "SENDING...";
+      await supabase.from('notes').insert([{ friend_name: currentFriend, message: msg, color_combo: selectedCombo }]);
+      document.getElementById('note-text').value = '';
+      document.getElementById('sub-btn').innerText = "DROP NOTE";
+    }
+  </script>
+</body>
+</html>    
     #current-friend-name {
       font-size: 4rem;
       font-weight: 900;
