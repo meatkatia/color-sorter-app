@@ -26,7 +26,7 @@
       text-transform: uppercase;
     }
 
-    /* STICKY TOP NAVIGATION (3 tabs) */
+    /* STICKY TOP NAVIGATION */
     #top-nav {
       display: flex;
       position: sticky;
@@ -72,7 +72,7 @@
     .friend-btn {
       width: 100%;
       padding: 25px 10px;
-      font-size: 12vw;
+      font-size: 14vw;
       font-family: 'Impact', 'Arial Black', sans-serif;
       letter-spacing: -2px;
       border: none;
@@ -81,11 +81,12 @@
     }
     .friend-btn:active { transform: scale(0.98); }
 
-    #btn-Evvie { background: #ccff00; color: #050505; } 
-    #btn-Joe-C { background: #ff80bf; color: #050505; } 
-    #btn-Joe-L { background: #ffffff; color: #050505; } 
-    #btn-Perdi { background: #050505; color: #ccff00; border: 4px solid #ccff00; } 
-    #btn-Katia { background: #050505; color: #ff80bf; border: 4px solid #ff80bf; } 
+    /* 🎨 SQUAD SIGNATURE COLORS 🎨 */
+    #btn-Evvie { background: #ff0000; color: #ff80bf; } /* Bright Red + Pink */
+    #btn-Joe-C { background: #ffff00; color: #ff0000; } /* Sunset Yellow + Red */
+    #btn-Joe-L { background: #ff6600; color: #ffffff; } /* Orange + White */
+    #btn-Perdi { background: #002fa7; color: #ffffff; } /* IK Blue + White */
+    #btn-Katia { background: #00ff00; color: #ffffff; } /* Lime Green + White */
 
     #friend-corner { display: none; padding: 15px; }
     
@@ -101,7 +102,15 @@
       text-align: left;
     }
 
-    #current-name { font-size: 15vw; letter-spacing: -3px; margin-bottom: 20px; color: #ffffff; line-height: 1; }
+    /* Name header inside the corner */
+    #current-name { 
+      font-size: 18vw; 
+      letter-spacing: -3px; 
+      margin-bottom: 20px; 
+      line-height: 1; 
+      display: inline-block;
+      padding: 10px 20px;
+    }
 
     .color-picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
     .combo-opt { height: 60px; cursor: pointer; border: 3px solid #333; transition: transform 0.1s; }
@@ -169,64 +178,21 @@
 
     /* --- SURVIVAL PROTOCOL STYLES --- */
     .hazard-stripes {
-      background: repeating-linear-gradient(
-        45deg,
-        #ccff00,
-        #ccff00 20px,
-        #050505 20px,
-        #050505 40px
-      );
-      height: 40px;
-      margin: 20px 0;
-      border: 4px solid #050505;
+      background: repeating-linear-gradient( 45deg, #ccff00, #ccff00 20px, #050505 20px, #050505 40px );
+      height: 40px; margin: 20px 0; border: 4px solid #050505;
     }
 
     .survival-card {
-      background: #050505;
-      border: 6px solid #d10000; /* Flashing hazard red */
-      padding: 25px;
-      margin-bottom: 30px;
-      color: #ffffff;
-      box-shadow: 12px 12px 0px #d10000;
+      background: #050505; border: 6px solid #d10000; padding: 25px; margin-bottom: 30px;
+      color: #ffffff; box-shadow: 12px 12px 0px #d10000;
     }
     
-    .survival-card.yellow-warn {
-      border-color: #ccff00;
-      box-shadow: 12px 12px 0px #ccff00;
-    }
-
-    .survival-title {
-      font-size: 10vw;
-      letter-spacing: -1px;
-      color: #ccff00;
-      margin-bottom: 20px;
-      line-height: 0.9;
-    }
-
-    .survival-card.yellow-warn .survival-title {
-      color: #ffffff;
-    }
-
-    .rule-item {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      line-height: 1.4;
-      border-bottom: 1px dashed #333;
-      padding-bottom: 15px;
-    }
+    .survival-card.yellow-warn { border-color: #ccff00; box-shadow: 12px 12px 0px #ccff00; }
+    .survival-title { font-size: 10vw; letter-spacing: -1px; color: #ccff00; margin-bottom: 20px; line-height: 0.9; }
+    .survival-card.yellow-warn .survival-title { color: #ffffff; }
+    .rule-item { font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; border-bottom: 1px dashed #333; padding-bottom: 15px; }
     .rule-item:last-child { border-bottom: none; }
-
-    .rule-label {
-      background: #d10000;
-      color: #fff;
-      font-family: 'Impact';
-      padding: 2px 8px;
-      display: inline-block;
-      margin-bottom: 5px;
-      font-size: 1.3rem;
-    }
+    .rule-label { background: #d10000; color: #fff; font-family: 'Impact'; padding: 2px 8px; display: inline-block; margin-bottom: 5px; font-size: 1.3rem; }
     .survival-card.yellow-warn .rule-label { background: #ccff00; color: #050505; }
 
   </style>
@@ -273,7 +239,6 @@
 
   <div id="plan-view" class="view-section">
     <h2 class="plan-header">MASTER<br>PLAN</h2>
-    
     <div class="timeline">
       <div class="day-card">
         <div class="day-date">FRI 15 MAY</div>
@@ -341,49 +306,34 @@
 
   <div id="survival-guide" class="view-section">
     <h2 class="plan-header" style="color:#d10000;">SURVIVAL<br>PROTOCOL</h2>
-    
     <div class="hazard-stripes"></div>
 
     <div class="survival-card">
       <div class="survival-title">BLACK BEARS</div>
-      
       <div class="rule-item">
-        <span class="rule-label">LIKELIHOOD:</span>
-        Moderate. Especially at dawn, dusk, and near Camp Curry.
+        <span class="rule-label">LIKELIHOOD:</span> Moderate. Especially at dawn, dusk, and near Camp Curry.
       </div>
-      
       <div class="rule-item">
-        <span class="rule-label">IF YOU SEE ONE:</span>
-        Stop. Don't run. Make yourself big, speak firmly, and back away slowly. Stay 50 yards away (100 yards if it has cubs).
+        <span class="rule-label">IF YOU SEE ONE:</span> Stop. Don't run. Make yourself big, speak firmly, and back away slowly. Stay 50 yards away (100 yards if it has cubs).
       </div>
-
       <div class="rule-item">
-        <span class="rule-label">IF IT APPROACHES:</span>
-        Stand tall, make noise, wave arms. Bears are scared of confident humans. Do NOT play dead.
+        <span class="rule-label">IF IT APPROACHES:</span> Stand tall, make noise, wave arms. Bears are scared of confident humans. Do NOT play dead.
       </div>
-
       <div class="rule-item" style="color: #ff80bf;">
-        <span class="rule-label" style="background:#ff80bf; color:#050505;">FOOD STORAGE (CRITICAL):</span>
-        Never leave food in the GMC Acadia. They will break the windows. At night, do not sleep with scented items (toothpaste, lip balm) in your cabin. Use bear boxes.
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">FOOD STORAGE (CRITICAL):</span> Never leave food in the GMC Acadia. They will break the windows. At night, do not sleep with scented items (toothpaste, lip balm) in your cabin. Use bear boxes.
       </div>
     </div>
 
     <div class="survival-card">
       <div class="survival-title">MOUNTAIN LIONS</div>
-      
       <div class="rule-item">
-        <span class="rule-label">LIKELIHOOD:</span>
-        Very low. They actively avoid humans.
+        <span class="rule-label">LIKELIHOOD:</span> Very low. They actively avoid humans.
       </div>
-      
       <div class="rule-item">
-        <span class="rule-label">IF YOU SEE ONE:</span>
-        Do NOT run — this triggers their prey instinct. Face it, make yourself large, and maintain eye contact.
+        <span class="rule-label">IF YOU SEE ONE:</span> Do NOT run — this triggers their prey instinct. Face it, make yourself large, and maintain eye contact.
       </div>
-
       <div class="rule-item">
-        <span class="rule-label">IF IT APPROACHES:</span>
-        Make loud noises, wave arms, throw rocks or sticks. Do not crouch down.
+        <span class="rule-label">IF IT APPROACHES:</span> Make loud noises, wave arms, throw rocks or sticks. Do not crouch down.
       </div>
     </div>
 
@@ -391,28 +341,19 @@
 
     <div class="survival-card yellow-warn">
       <div class="survival-title">GENERAL HAZARDS</div>
-      
       <div class="rule-item">
-        <span class="rule-label">GROUND SQUIRRELS:</span>
-        They are everywhere. Do not feed them. They carry the plague (genuinely). Wash hands after contact.
+        <span class="rule-label">GROUND SQUIRRELS:</span> They are everywhere. Do not feed them. They carry the plague (genuinely). Wash hands after contact.
       </div>
-
       <div class="rule-item">
-        <span class="rule-label">ALTITUDE SICKNESS:</span>
-        You are going from sea level to 5,000-8,000ft. Drink significantly more water than usual. Go easy on alcohol the first nights.
+        <span class="rule-label">ALTITUDE SICKNESS:</span> You are going from sea level to 5,000-8,000ft. Drink significantly more water than usual. Go easy on alcohol the first nights.
       </div>
-
       <div class="rule-item">
-        <span class="rule-label">WILD SWIMMING:</span>
-        Snowmelt rivers run fast in early May. Wade in slowly, the shock is real. Never swim alone in moving water.
+        <span class="rule-label">WILD SWIMMING:</span> Snowmelt rivers run fast in early May. Wade in slowly, the shock is real. Never swim alone in moving water.
       </div>
-      
       <div class="rule-item">
-        <span class="rule-label">RATTLESNAKES:</span>
-        Present on lower trails in warm weather. Watch where you put your hands and feet on rocky trails. Back away if encountered.
+        <span class="rule-label">RATTLESNAKES:</span> Present on lower trails in warm weather. Watch where you put your hands and feet on rocky trails. Back away if encountered.
       </div>
     </div>
-
   </div>
 
   <script>
@@ -447,6 +388,15 @@
     var DB_URL = 'https://dovjvnierlfkhnokflkn.supabase.co/rest/v1/notes';
     var DB_KEY = 'sb_publishable_l33PQiCwTtp7n6-9g_-_Yg_KSeNox6V';
 
+    // Holds the specific colors for each friend's corner header
+    var squadColors = {
+      'Evvie': { bg: '#ff0000', text: '#ff80bf' },
+      'Joe C': { bg: '#ffff00', text: '#ff0000' },
+      'Joe L': { bg: '#ff6600', text: '#ffffff' },
+      'Perdi': { bg: '#002fa7', text: '#ffffff' },
+      'Katia': { bg: '#00ff00', text: '#ffffff' }
+    };
+
     window.setCombo = function(c) {
       selectedCombo = c;
       document.getElementById('note-text').className = 'combo-' + c;
@@ -461,7 +411,11 @@
       currentFriend = name;
       document.getElementById('notes-hub').classList.remove('active');
       document.getElementById('friend-corner').style.display = 'block';
-      document.getElementById('current-name').innerText = name;
+      
+      var nameHeader = document.getElementById('current-name');
+      nameHeader.innerText = name;
+      nameHeader.style.backgroundColor = squadColors[name].bg;
+      nameHeader.style.color = squadColors[name].text;
 
       window.fetchNotes();
 
