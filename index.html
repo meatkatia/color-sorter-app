@@ -26,7 +26,7 @@
       text-transform: uppercase;
     }
 
-    /* --- ENTER THE VOID (OPENING SCREEN) --- */
+    /* --- SIMPLE & BOLD OPENING SCREEN --- */
     #intro-void {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -37,69 +37,29 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      cursor: pointer;
-      overflow: hidden;
-      animation: voidBgStrobe 0.5s infinite;
-    }
-    
-    @keyframes voidBgStrobe {
-      0%, 49% { background-color: #050505; }
-      50%, 100% { background-color: #111111; }
+      padding: 20px;
     }
 
     .void-main-title {
-      font-size: 20vw;
+      font-size: 15vw;
       font-weight: 900;
-      line-height: 0.8;
+      line-height: 0.9;
       letter-spacing: -2px;
-      animation: voidTextStrobe 0.15s infinite alternate;
-      z-index: 2;
-    }
-
-    @keyframes voidTextStrobe {
-      0% { color: #ccff00; transform: scale(1); }
-      33% { color: #ff80bf; transform: scale(1.05) skewX(-5deg); }
-      66% { color: #ffffff; transform: scale(0.95) skewX(5deg); }
-      100% { color: #ccff00; transform: scale(1); }
+      color: #ccff00;
+      margin-bottom: 40px;
     }
 
     .void-enter-text {
-      font-size: 6vw;
-      margin-top: 40px;
-      color: #ffffff;
-      background: #d10000;
-      padding: 8px 20px;
-      animation: blink 0.5s infinite;
-      z-index: 2;
+      font-size: 8vw;
+      color: #050505;
+      background: #ff80bf;
+      padding: 20px 40px;
+      cursor: pointer;
+      border: 4px solid #ff80bf;
+      transition: transform 0.1s;
     }
-
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    /* Chaotic Flashing Background Words */
-    .void-flash-word {
-      position: absolute;
-      font-size: 13vw;
-      font-weight: 900;
-      white-space: nowrap;
-      opacity: 0;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .vf-1 { top: 10%; left: -5%; color: #ccff00; animation: flashWord 2s infinite 0.1s; }
-    .vf-2 { top: 40%; right: -10%; color: #ff80bf; animation: flashWord 2.4s infinite 0.8s; }
-    .vf-3 { bottom: 15%; left: 5%; color: #ffffff; animation: flashWord 1.9s infinite 0.4s; }
-    .vf-4 { top: 70%; right: 10%; color: #d10000; animation: flashWord 2.7s infinite 1.2s; }
-    .vf-5 { top: 25%; left: 20%; color: #ccff00; animation: flashWord 2.1s infinite 1.5s; }
-
-    @keyframes flashWord {
-      0%, 92% { opacity: 0; transform: scale(0.8); }
-      93%, 97% { opacity: 1; transform: scale(1.2); }
-      100% { opacity: 0; transform: scale(1); }
-    }
+    
+    .void-enter-text:active { transform: scale(0.95); }
 
     /* --- STICKY TOP NAVIGATION --- */
     #top-nav {
@@ -137,9 +97,20 @@
       letter-spacing: -0.05em; 
       line-height: 0.8;
       margin-top: 2vh;
-      margin-bottom: 5vh;
+      margin-bottom: 2vh; /* Reduced to fit subtitle */
       text-align: center;
       color: #ff80bf; 
+    }
+
+    .warm-subtitle {
+      text-align: center;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-transform: lowercase;
+      margin-bottom: 40px;
+      padding: 0 10px;
     }
 
     #menu { display: flex; flex-direction: column; gap: 20px; }
@@ -253,56 +224,18 @@
 </head>
 <body>
 
-  <div id="intro-void" onclick="enterApp()">
-    <div class="void-flash-word vf-1">5:00 AM DEPARTURE</div>
-    <div class="void-flash-word vf-2">WILD SWIMMING</div>
-    <div class="void-flash-word vf-3">BEARS</div>
-    <div class="void-flash-word vf-4">EUROVISION</div>
-    <div class="void-flash-word vf-5">TIOGA PASS</div>
-
-    <div class="void-main-title">DUMBWINGS<br>TAKE<br>CALI</div>
-    <div class="void-enter-text">[ TAP TO ENTER ]</div>
+  <div id="intro-void">
+    <div class="void-main-title">THE DUMBWINGS<br>GO ON A<br>ROAD TRIP</div>
+    <div class="void-enter-text" onclick="enterApp()">LET'S GO</div>
   </div>
 
   <div id="top-nav">
-    <button class="nav-btn active" id="nav-notes" onclick="switchTab('notes-hub')">NOTES</button>
-    <button class="nav-btn" id="nav-plan" onclick="switchTab('plan-view')">THE PLAN</button>
+    <button class="nav-btn" id="nav-notes" onclick="switchTab('notes-hub')">NOTES</button>
+    <button class="nav-btn active" id="nav-plan" onclick="switchTab('plan-view')">THE PLAN</button>
     <button class="nav-btn" id="nav-survival" onclick="switchTab('survival-guide')">SURVIVAL</button>
   </div>
 
-  <div id="notes-hub" class="view-section active">
-    <h1>WARM<br>+ FUZZY</h1>
-    <div id="menu">
-      <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
-      <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
-      <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
-      <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
-      <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
-    </div>
-  </div>
-
-  <div id="friend-corner" style="display:none; padding: 15px; padding-bottom: 50px;">
-    <button class="back-btn" onclick="closeCorner()">← BACK TO SQUAD</button>
-    <h2 id="current-name">NAME</h2>
-    
-    <div class="color-picker" id="picker">
-      <div class="combo-opt combo-green-black selected" id="opt-green-black" onclick="setCombo('green-black')"></div>
-      <div class="combo-opt combo-black-green" id="opt-black-green" onclick="setCombo('black-green')"></div>
-      <div class="combo-opt combo-pink-black" id="opt-pink-black" onclick="setCombo('pink-black')"></div>
-      <div class="combo-opt combo-black-pink" id="opt-black-pink" onclick="setCombo('black-pink')"></div>
-      <div class="combo-opt combo-light-dark-pink" id="opt-light-dark-pink" onclick="setCombo('light-dark-pink')"></div>
-      <div class="combo-opt combo-dark-light-pink" id="opt-dark-light-pink" onclick="setCombo('dark-light-pink')"></div>
-      <div class="combo-opt combo-white-black" id="opt-white-black" onclick="setCombo('white-black')"></div>
-      <div class="combo-opt combo-black-white" id="opt-black-white" onclick="setCombo('black-white')"></div>
-    </div>
-    
-    <textarea id="note-text" class="combo-green-black" placeholder="WRITE YOUR NOTE HERE..."></textarea>
-    <button class="submit-btn" id="sub-btn" onclick="submitNote()">DROP NOTE</button>
-
-    <div id="notes-list"></div>
-  </div>
-
-  <div id="plan-view" class="view-section">
+  <div id="plan-view" class="view-section active">
     <h2 class="plan-header">MASTER<br>PLAN</h2>
     <div class="timeline">
       <div class="day-card">
@@ -369,6 +302,39 @@
     </div>
   </div>
 
+  <div id="notes-hub" class="view-section">
+    <h1>WARM<br>+ FUZZY</h1>
+    <p class="warm-subtitle">leave someone a note that will make them feel warm and fuzzy.</p>
+    <div id="menu">
+      <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
+      <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
+      <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
+      <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
+      <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
+    </div>
+  </div>
+
+  <div id="friend-corner" style="display:none; padding: 15px; padding-bottom: 50px;">
+    <button class="back-btn" onclick="closeCorner()">← BACK TO SQUAD</button>
+    <h2 id="current-name">NAME</h2>
+    
+    <div class="color-picker" id="picker">
+      <div class="combo-opt combo-green-black selected" id="opt-green-black" onclick="setCombo('green-black')"></div>
+      <div class="combo-opt combo-black-green" id="opt-black-green" onclick="setCombo('black-green')"></div>
+      <div class="combo-opt combo-pink-black" id="opt-pink-black" onclick="setCombo('pink-black')"></div>
+      <div class="combo-opt combo-black-pink" id="opt-black-pink" onclick="setCombo('black-pink')"></div>
+      <div class="combo-opt combo-light-dark-pink" id="opt-light-dark-pink" onclick="setCombo('light-dark-pink')"></div>
+      <div class="combo-opt combo-dark-light-pink" id="opt-dark-light-pink" onclick="setCombo('dark-light-pink')"></div>
+      <div class="combo-opt combo-white-black" id="opt-white-black" onclick="setCombo('white-black')"></div>
+      <div class="combo-opt combo-black-white" id="opt-black-white" onclick="setCombo('black-white')"></div>
+    </div>
+    
+    <textarea id="note-text" class="combo-green-black" placeholder="WRITE YOUR NOTE HERE..."></textarea>
+    <button class="submit-btn" id="sub-btn" onclick="submitNote()">DROP NOTE</button>
+
+    <div id="notes-list"></div>
+  </div>
+
   <div id="survival-guide" class="view-section">
     <h2 class="plan-header" style="color:#d10000;">SURVIVAL<br>PROTOCOL</h2>
     <div class="hazard-stripes"></div>
@@ -425,10 +391,7 @@
     // --- ENTER THE VOID LOGIC ---
     function enterApp() {
       var voidOverlay = document.getElementById('intro-void');
-      voidOverlay.style.opacity = '0';
-      setTimeout(function() {
-        voidOverlay.style.display = 'none';
-      }, 300); // Wait for a short fade out (if desired, though instant is also very brutalist)
+      voidOverlay.style.display = 'none';
     }
 
     // --- TAB SWITCHING LOGIC ---
