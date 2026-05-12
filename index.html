@@ -26,7 +26,7 @@
       text-transform: uppercase;
     }
 
-    /* STICKY TOP NAVIGATION (Now with 3 tabs) */
+    /* STICKY TOP NAVIGATION (3 tabs) */
     #top-nav {
       display: flex;
       position: sticky;
@@ -349,22 +349,22 @@
       
       <div class="rule-item">
         <span class="rule-label">LIKELIHOOD:</span>
-        Moderate. Especially at dawn, dusk, and near Camp Curry[cite: 424, 426].
+        Moderate. Especially at dawn, dusk, and near Camp Curry.
       </div>
       
       <div class="rule-item">
         <span class="rule-label">IF YOU SEE ONE:</span>
-        Stop. Don't run. Make yourself big, speak firmly, and back away slowly[cite: 426]. Stay 50 yards away (100 yards if it has cubs)[cite: 426].
+        Stop. Don't run. Make yourself big, speak firmly, and back away slowly. Stay 50 yards away (100 yards if it has cubs).
       </div>
 
       <div class="rule-item">
         <span class="rule-label">IF IT APPROACHES:</span>
-        Stand tall, make noise, wave arms[cite: 426]. Bears are scared of confident humans. Do NOT play dead[cite: 426].
+        Stand tall, make noise, wave arms. Bears are scared of confident humans. Do NOT play dead.
       </div>
 
       <div class="rule-item" style="color: #ff80bf;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">FOOD STORAGE (CRITICAL):</span>
-        Never leave food in the GMC Acadia. They will break the windows[cite: 425, 426]. At night, do not sleep with scented items (toothpaste, lip balm) in your cabin. Use bear boxes[cite: 426].
+        Never leave food in the GMC Acadia. They will break the windows. At night, do not sleep with scented items (toothpaste, lip balm) in your cabin. Use bear boxes.
       </div>
     </div>
 
@@ -373,17 +373,17 @@
       
       <div class="rule-item">
         <span class="rule-label">LIKELIHOOD:</span>
-        Very low[cite: 429]. They actively avoid humans.
+        Very low. They actively avoid humans.
       </div>
       
       <div class="rule-item">
         <span class="rule-label">IF YOU SEE ONE:</span>
-        Do NOT run — this triggers their prey instinct[cite: 429]. Face it, make yourself large, and maintain eye contact[cite: 429].
+        Do NOT run — this triggers their prey instinct. Face it, make yourself large, and maintain eye contact.
       </div>
 
       <div class="rule-item">
         <span class="rule-label">IF IT APPROACHES:</span>
-        Make loud noises, wave arms, throw rocks or sticks[cite: 429]. Do not crouch down[cite: 429].
+        Make loud noises, wave arms, throw rocks or sticks. Do not crouch down.
       </div>
     </div>
 
@@ -394,37 +394,39 @@
       
       <div class="rule-item">
         <span class="rule-label">GROUND SQUIRRELS:</span>
-        They are everywhere. Do not feed them. They carry the plague (genuinely). Wash hands after contact[cite: 433].
+        They are everywhere. Do not feed them. They carry the plague (genuinely). Wash hands after contact.
       </div>
 
       <div class="rule-item">
         <span class="rule-label">ALTITUDE SICKNESS:</span>
-        You are going from sea level to 5,000-8,000ft[cite: 439]. Drink significantly more water than usual[cite: 442]. Go easy on alcohol the first nights[cite: 446].
+        You are going from sea level to 5,000-8,000ft. Drink significantly more water than usual. Go easy on alcohol the first nights.
       </div>
 
       <div class="rule-item">
         <span class="rule-label">WILD SWIMMING:</span>
-        Snowmelt rivers run fast in early May[cite: 421]. Wade in slowly, the shock is real[cite: 409]. Never swim alone in moving water[cite: 411].
+        Snowmelt rivers run fast in early May. Wade in slowly, the shock is real. Never swim alone in moving water.
+      </div>
+      
+      <div class="rule-item">
+        <span class="rule-label">RATTLESNAKES:</span>
+        Present on lower trails in warm weather. Watch where you put your hands and feet on rocky trails. Back away if encountered.
       </div>
     </div>
 
   </div>
 
   <script>
-    // --- TAB SWITCHING LOGIC (Now supports 3 tabs) ---
+    // --- TAB SWITCHING LOGIC ---
     function switchTab(targetId) {
-      // 1. Hide all main sections
       document.getElementById('notes-hub').classList.remove('active');
       document.getElementById('plan-view').classList.remove('active');
       document.getElementById('survival-guide').classList.remove('active');
       document.getElementById('friend-corner').style.display = 'none';
 
-      // 2. Reset Nav Buttons
       document.getElementById('nav-notes').classList.remove('active');
       document.getElementById('nav-plan').classList.remove('active');
       document.getElementById('nav-survival').classList.remove('active');
 
-      // 3. Show Target
       if (targetId === 'notes-hub') {
         document.getElementById('notes-hub').classList.add('active');
         document.getElementById('nav-notes').classList.add('active');
@@ -463,7 +465,6 @@
 
       window.fetchNotes();
 
-      // Background auto-refresher (every 3 seconds)
       if (pollInterval) clearInterval(pollInterval);
       pollInterval = setInterval(window.fetchNotes, 3000);
     };
