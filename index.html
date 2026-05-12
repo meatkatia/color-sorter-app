@@ -81,12 +81,12 @@
     }
     .friend-btn:active { transform: scale(0.98); }
 
-    /* 🎨 SQUAD SIGNATURE COLORS 🎨 */
-    #btn-Evvie { background: #ff0000; color: #ff80bf; } /* Bright Red + Pink */
-    #btn-Joe-C { background: #ffff00; color: #ff0000; } /* Sunset Yellow + Red */
-    #btn-Joe-L { background: #ff6600; color: #ffffff; } /* Orange + White */
-    #btn-Perdi { background: #002fa7; color: #ffffff; } /* IK Blue + White */
-    #btn-Katia { background: #00ff00; color: #ffffff; } /* Lime Green + White */
+    /* 🎨 REFINED, DISCIPLINED SQUAD COLORS 🎨 */
+    #btn-Evvie { background: #ccff00; color: #050505; } 
+    #btn-Joe-C { background: #ff80bf; color: #050505; } 
+    #btn-Joe-L { background: #ffffff; color: #050505; } 
+    #btn-Perdi { background: #050505; color: #ccff00; border: 4px solid #ccff00; } 
+    #btn-Katia { background: #050505; color: #ff80bf; border: 4px solid #ff80bf; } 
 
     #friend-corner { display: none; padding: 15px; }
     
@@ -388,13 +388,13 @@
     var DB_URL = 'https://dovjvnierlfkhnokflkn.supabase.co/rest/v1/notes';
     var DB_KEY = 'sb_publishable_l33PQiCwTtp7n6-9g_-_Yg_KSeNox6V';
 
-    // Holds the specific colors for each friend's corner header
+    // Holds the tasteful core palette colors for each friend's corner header
     var squadColors = {
-      'Evvie': { bg: '#ff0000', text: '#ff80bf' },
-      'Joe C': { bg: '#ffff00', text: '#ff0000' },
-      'Joe L': { bg: '#ff6600', text: '#ffffff' },
-      'Perdi': { bg: '#002fa7', text: '#ffffff' },
-      'Katia': { bg: '#00ff00', text: '#ffffff' }
+      'Evvie': { bg: '#ccff00', text: '#050505', border: 'none' },
+      'Joe C': { bg: '#ff80bf', text: '#050505', border: 'none' },
+      'Joe L': { bg: '#ffffff', text: '#050505', border: 'none' },
+      'Perdi': { bg: '#050505', text: '#ccff00', border: '4px solid #ccff00' },
+      'Katia': { bg: '#050505', text: '#ff80bf', border: '4px solid #ff80bf' }
     };
 
     window.setCombo = function(c) {
@@ -416,6 +416,12 @@
       nameHeader.innerText = name;
       nameHeader.style.backgroundColor = squadColors[name].bg;
       nameHeader.style.color = squadColors[name].text;
+      
+      if(squadColors[name].border !== 'none') {
+        nameHeader.style.border = squadColors[name].border;
+      } else {
+        nameHeader.style.border = 'none';
+      }
 
       window.fetchNotes();
 
