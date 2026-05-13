@@ -127,12 +127,12 @@
     }
     .friend-btn:active { transform: scale(0.98); }
 
-    /* 🎨 REFINED SQUAD COLORS 🎨 */
+    /* 🎨 FULL COLOR BLOCKS FOR SQUAD 🎨 */
     #btn-Evvie { background: #ccff00; color: #050505; } 
     #btn-Joe-C { background: #ff80bf; color: #050505; } 
     #btn-Joe-L { background: #ffffff; color: #050505; } 
-    #btn-Perdi { background: #050505; color: #ccff00; border: 4px solid #ccff00; } 
-    #btn-Katia { background: #050505; color: #ff80bf; border: 4px solid #ff80bf; } 
+    #btn-Perdi { background: #b30059; color: #ffb3e6; } 
+    #btn-Katia { background: #ffb3e6; color: #b30059; } 
 
     #friend-corner { display: none; padding: 15px; }
     
@@ -231,6 +231,9 @@
     .survival-card.medical-priority .rule-label { background: #ffffff; color: #050505; }
     .survival-card.pink-warn .rule-label { background: #ff80bf; color: #050505; }
 
+    .hike-day-label { font-family: 'Impact'; font-size: 1.5rem; letter-spacing: 1px; color: #ff80bf; margin-top: 8px; display: block; }
+    .hike-day-label.green { color: #ccff00; }
+
     /* Maps and Hiking Buttons */
     .map-embed { width: 100%; height: 200px; border: 4px solid currentColor; margin-top: 15px; filter: grayscale(100%) contrast(1.2); }
     
@@ -285,10 +288,6 @@
     
     <div class="survival-card pink-warn" style="margin-top: 20px;">
       <div class="survival-title" style="color: #ff80bf;">KEY LOCATIONS</div>
-      <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ff80bf; color:#050505;">CAR RENTAL (SIXT):</span><br>
-        Los Angeles Downtown (Pick up: 12:00 PM Sat)
-      </div>
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">SEQUOIAS AIRBNB:</span><br>
         Mineral King Rancho, Three Rivers, CA<br>
@@ -375,11 +374,11 @@
     <h1>WARM<br>+ FUZZY</h1>
     <p class="warm-subtitle">leave someone a note that will make them feel warm and fuzzy.</p>
     <div id="menu">
-      <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">Evvie</button>
-      <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">Joe C</button>
-      <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">Joe L</button>
-      <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">Perdi</button>
-      <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">Katia</button>
+      <button class="friend-btn" id="btn-Evvie" onclick="openCorner('Evvie')">EVVIE</button>
+      <button class="friend-btn" id="btn-Joe-C" onclick="openCorner('Joe C')">JOE C</button>
+      <button class="friend-btn" id="btn-Joe-L" onclick="openCorner('Joe L')">JOE L</button>
+      <button class="friend-btn" id="btn-Perdi" onclick="openCorner('Perdi')">PERDI</button>
+      <button class="friend-btn" id="btn-Katia" onclick="openCorner('Katia')">KATIA</button>
     </div>
   </div>
 
@@ -419,7 +418,8 @@
       <div class="survival-title" style="color: #ffffff;">YOSEMITE EPICS</div>
       
       <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#d10000; color:#ffffff;">HARD: MIST TRAIL TO NEVADA FALLS</span>
+        <span class="rule-label" style="background:#ffffff; color:#050505;">1. MIST TRAIL TO NEVADA FALLS</span>
+        <div class="hike-day-label">DAY 6: WED 20 MAY</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">6-8 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">2,000 ft</span> Climb</div>
@@ -433,7 +433,8 @@
       </div>
 
       <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: SENTINEL DOME & TAFT POINT</span>
+        <span class="rule-label" style="background:#ffffff; color:#050505;">2. SENTINEL DOME & TAFT POINT</span>
+        <div class="hike-day-label">DAY 6: WED 20 MAY (ALT)</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">5.1 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">1,100 ft</span> Climb</div>
@@ -452,6 +453,7 @@
       
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: LOWER YOSEMITE FALLS</span>
+        <div class="hike-day-label green">DAY 7: THU 21 MAY</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">1.2 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">50 ft</span> Climb</div>
@@ -463,6 +465,7 @@
 
       <div class="rule-item" style="border-bottom: none;">
         <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: MIRROR LAKE LOOP</span>
+        <div class="hike-day-label green">DAY 7: THU 21 MAY (ALT)</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">5.0 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">100 ft</span> Climb</div>
@@ -477,7 +480,8 @@
       <div class="survival-title">SEQUOIA CLASSICS</div>
       
       <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CONGRESS TRAIL</span>
+        <span class="rule-label" style="background:#ccff00; color:#050505;">3. CONGRESS TRAIL</span>
+        <div class="hike-day-label green">DAY 3: SUN 17 MAY</div>
         <div class="hike-stats">
           <div class="stat-box"><span class="stat-val">2.9 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">500 ft</span> Climb</div>
@@ -491,6 +495,7 @@
 
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CRESCENT MEADOW</span>
+        <div class="hike-day-label green">DAY 4: MON 18 MAY</div>
         <div class="hike-stats">
           <div class="stat-box"><span class="stat-val">1.8 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">150 ft</span> Climb</div>
@@ -503,11 +508,12 @@
 
       <div class="rule-item" style="border-bottom: none;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: MORO ROCK</span>
+        <div class="hike-day-label">DAY 3: SUN 17 MAY (SUNSET)</div>
         <div class="hike-stats">
           <div class="stat-box"><span class="stat-val">0.4 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">400 steps</span> Climb</div>
           <div class="stat-box"><span class="stat-val">45 min</span> Time</div>
-          <div class="stat-box"><span class="stat-val">Out & Back</span> Type</div>
+          <div class="stat-box"><span class="stat-val">Out/Back</span> Type</div>
         </div>
         <strong style="color:#ccff00;">Pro-Tip:</strong> Do this at golden hour for sunset. Bring a headtorch for the descent.<br>
         <a href="https://www.alltrails.com/trail/us/california/moro-rock-trail" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
@@ -624,8 +630,8 @@
       'Evvie': { bg: '#ccff00', text: '#050505', border: 'none' },
       'Joe C': { bg: '#ff80bf', text: '#050505', border: 'none' },
       'Joe L': { bg: '#ffffff', text: '#050505', border: 'none' },
-      'Perdi': { bg: '#050505', text: '#ccff00', border: '4px solid #ccff00' },
-      'Katia': { bg: '#050505', text: '#ff80bf', border: '4px solid #ff80bf' }
+      'Perdi': { bg: '#b30059', text: '#ffb3e6', border: 'none' },
+      'Katia': { bg: '#ffb3e6', text: '#b30059', border: 'none' }
     };
 
     window.setCombo = function(c) {
@@ -644,7 +650,7 @@
       document.getElementById('friend-corner').style.display = 'block';
       
       var nameHeader = document.getElementById('current-name');
-      nameHeader.innerText = name;
+      nameHeader.innerText = name.toUpperCase();
       nameHeader.style.backgroundColor = squadColors[name].bg;
       nameHeader.style.color = squadColors[name].text;
       
