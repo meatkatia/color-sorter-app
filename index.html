@@ -231,7 +231,7 @@
     .survival-card.medical-priority .rule-label { background: #ffffff; color: #050505; }
     .survival-card.pink-warn .rule-label { background: #ff80bf; color: #050505; }
 
-    .hike-day-label { font-family: 'Impact'; font-size: 1.5rem; letter-spacing: 1px; color: #ff80bf; margin-top: 8px; display: block; }
+    .hike-day-label { font-family: 'Impact'; font-size: 1.5rem; letter-spacing: 1px; color: #ff80bf; margin-top: 8px; margin-bottom: 5px; display: block; }
     .hike-day-label.green { color: #ccff00; }
 
     /* Maps and Hiking Buttons */
@@ -289,18 +289,20 @@
     <div class="survival-card pink-warn" style="margin-top: 20px;">
       <div class="survival-title" style="color: #ff80bf;">KEY LOCATIONS</div>
       <div class="rule-item" style="border-color: #555;">
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">CAR RENTAL (SIXT):</span><br>
+        Los Angeles Downtown
+      </div>
+      <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">SEQUOIAS AIRBNB:</span><br>
-        Mineral King Rancho, Three Rivers, CA<br>
-        <span style="color:#888; font-size: 1rem;">[INSERT EXACT ADDRESS HERE]</span>
+        Mineral King Rancho, Three Rivers, CA
       </div>
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">YOSEMITE CABIN:</span><br>
-        Curry Village, Yosemite Valley, CA
+        Camp Curry (Curry Village), Yosemite Valley, CA
       </div>
       <div class="rule-item" style="border-bottom: none;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">YOSEMITE AIRBNB:</span><br>
-        Mountain Lodge, Yosemite Area<br>
-        <span style="color:#888; font-size: 1rem;">[INSERT EXACT ADDRESS HERE]</span>
+        Mountain Lodge Airbnb, Yosemite Area
       </div>
     </div>
 
@@ -414,27 +416,79 @@
       </div>
     </div>
 
-    <div class="survival-card medical-priority" style="border-color: #ffffff;">
-      <div class="survival-title" style="color: #ffffff;">YOSEMITE EPICS</div>
+    <div class="survival-card yellow-warn">
+      <div class="survival-title">DAY 3: SEQUOIAS</div>
       
       <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ffffff; color:#050505;">1. MIST TRAIL TO NEVADA FALLS</span>
-        <div class="hike-day-label">DAY 6: WED 20 MAY</div>
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CONGRESS TRAIL</span>
+        <div class="hike-day-label green">SUN 17 MAY</div>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">2.9 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">500 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">1.5 hrs</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Tip:</strong> Branch off the busy General Sherman path to walk among the giants in peace.<br>
+        <iframe class="map-embed" style="border-color: #ccff00;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Congress+Trail+Sequoia&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/congress-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
+      </div>
+
+      <div class="rule-item" style="border-bottom: none;">
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: MORO ROCK</span>
+        <div class="hike-day-label">SUN 17 MAY (SUNSET)</div>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">0.4 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">400 steps</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">45 min</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Out/Back</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Gear:</strong> Headtorch required for the descent.<br>
+        <strong style="color:#ccff00;">Tip:</strong> Arrive 30 mins before sunset for the best golden hour views in the park.<br>
+        <iframe class="map-embed" style="border-color: #ccff00;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Moro+Rock+Trail+Sequoia&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/moro-rock-trail" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
+      </div>
+    </div>
+
+    <div class="survival-card yellow-warn">
+      <div class="survival-title">DAY 4: SEQUOIAS</div>
+
+      <div class="rule-item" style="border-bottom: none;">
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CRESCENT MEADOW</span>
+        <div class="hike-day-label green">MON 18 MAY (DAWN)</div>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">1.8 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">150 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">1 hr</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Gear:</strong> Binoculars.<br>
+        <strong style="color:#ccff00;">Tip:</strong> The ultimate dawn bird-watching loop.<br>
+        <iframe class="map-embed" style="border-color: #ccff00;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Crescent+Meadow+Sequoia&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/crescent-meadow-loop-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
+      </div>
+    </div>
+
+    <div class="survival-card medical-priority" style="border-color: #ffffff;">
+      <div class="survival-title" style="color: #ffffff;">DAY 6: YOSEMITE EPICS</div>
+      
+      <div class="rule-item" style="border-color: #555;">
+        <span class="rule-label" style="background:#d10000; color:#ffffff;">HARD: MIST TRAIL TO NEVADA FALLS</span>
+        <div class="hike-day-label">WED 20 MAY</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">6-8 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">2,000 ft</span> Climb</div>
           <div class="stat-box"><span class="stat-val">5-7 hrs</span> Time</div>
           <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
         </div>
-        <strong style="color:#ffffff;">Gear:</strong> Waterproofs, dry bag, boots, 2-3L water.<br>
-        <strong style="color:#ffffff;">Pro-Tip:</strong> Hike UP Mist Trail, DOWN John Muir Trail (saves knees).<br>
-        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Happy+Isles+Trailhead,+Yosemite&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <strong style="color:#ffffff;">Gear:</strong> Waterproofs, dry bag, 3L water.<br>
+        <strong style="color:#ffffff;">Tip:</strong> Hike UP Mist Trail, DOWN John Muir Trail (saves knees).<br>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Mist+Trail+Trailhead+Yosemite&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
         <a href="https://www.alltrails.com/trail/us/california/vernal-and-nevada-falls-via-the-mist-trail" target="_blank" class="out-link-btn btn-hard">↓ ALLTRAILS MAP</a>
       </div>
 
       <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ffffff; color:#050505;">2. SENTINEL DOME & TAFT POINT</span>
-        <div class="hike-day-label">DAY 6: WED 20 MAY (ALT)</div>
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: SENTINEL DOME & TAFT POINT</span>
+        <div class="hike-day-label">WED 20 MAY (ALT)</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">5.1 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">1,100 ft</span> Climb</div>
@@ -442,83 +496,42 @@
           <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
         </div>
         <strong style="color:#ffffff;">Gear:</strong> Windbreaker, SPF, 2L water.<br>
-        <strong style="color:#ffffff;">Pro-Tip:</strong> Check if Glacier Point Road is open. Backup is Upper Yosemite Falls.<br>
-        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Sentinel+Dome+Trailhead,+Yosemite&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <strong style="color:#ffffff;">Tip:</strong> Check if Glacier Point Road is open.<br>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Sentinel+Dome+Trailhead+Yosemite&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
         <a href="https://www.alltrails.com/trail/us/california/sentinel-dome-and-taft-point-loop" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
       </div>
     </div>
 
     <div class="survival-card medical-priority" style="border-color: #ffffff;">
-      <div class="survival-title" style="color: #ffffff;">YOSEMITE RECOVERY</div>
+      <div class="survival-title" style="color: #ffffff;">DAY 7: RECOVERY</div>
       
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: LOWER YOSEMITE FALLS</span>
-        <div class="hike-day-label green">DAY 7: THU 21 MAY</div>
+        <div class="hike-day-label green">THU 21 MAY (MORNING)</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">1.2 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">50 ft</span> Climb</div>
           <div class="stat-box"><span class="stat-val">30 min</span> Time</div>
           <div class="stat-box"><span class="stat-val">Paved</span> Type</div>
         </div>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Lower+Yosemite+Fall+Trailhead&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
         <a href="https://www.alltrails.com/trail/us/california/lower-yosemite-falls-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
       </div>
 
       <div class="rule-item" style="border-bottom: none;">
         <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: MIRROR LAKE LOOP</span>
-        <div class="hike-day-label green">DAY 7: THU 21 MAY (ALT)</div>
+        <div class="hike-day-label green">THU 21 MAY (ALT)</div>
         <div class="hike-stats" style="color: #ffffff;">
           <div class="stat-box"><span class="stat-val">5.0 mi</span> Distance</div>
           <div class="stat-box"><span class="stat-val">100 ft</span> Climb</div>
           <div class="stat-box"><span class="stat-val">2 hrs</span> Time</div>
           <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
         </div>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Mirror+Lake+Trailhead+Yosemite&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
         <a href="https://www.alltrails.com/trail/us/california/mirror-lake-via-valley-loop-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
       </div>
     </div>
 
-    <div class="survival-card yellow-warn">
-      <div class="survival-title">SEQUOIA CLASSICS</div>
-      
-      <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ccff00; color:#050505;">3. CONGRESS TRAIL</span>
-        <div class="hike-day-label green">DAY 3: SUN 17 MAY</div>
-        <div class="hike-stats">
-          <div class="stat-box"><span class="stat-val">2.9 mi</span> Distance</div>
-          <div class="stat-box"><span class="stat-val">500 ft</span> Climb</div>
-          <div class="stat-box"><span class="stat-val">1.5 hrs</span> Time</div>
-          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
-        </div>
-        <strong style="color:#ccff00;">Pro-Tip:</strong> Branch off the busy General Sherman path to walk among the giants in peace.<br>
-        <iframe class="map-embed" style="border-color: #ccff00;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Sherman+Tree+Trailhead,+Sequoia+National+Park&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
-        <a href="https://www.alltrails.com/trail/us/california/congress-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
-      </div>
-
-      <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CRESCENT MEADOW</span>
-        <div class="hike-day-label green">DAY 4: MON 18 MAY</div>
-        <div class="hike-stats">
-          <div class="stat-box"><span class="stat-val">1.8 mi</span> Distance</div>
-          <div class="stat-box"><span class="stat-val">150 ft</span> Climb</div>
-          <div class="stat-box"><span class="stat-val">1 hr</span> Time</div>
-          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
-        </div>
-        <strong style="color:#ccff00;">Pro-Tip:</strong> The ultimate dawn bird-watching loop.<br>
-        <a href="https://www.alltrails.com/trail/us/california/crescent-meadow-loop-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
-      </div>
-
-      <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: MORO ROCK</span>
-        <div class="hike-day-label">DAY 3: SUN 17 MAY (SUNSET)</div>
-        <div class="hike-stats">
-          <div class="stat-box"><span class="stat-val">0.4 mi</span> Distance</div>
-          <div class="stat-box"><span class="stat-val">400 steps</span> Climb</div>
-          <div class="stat-box"><span class="stat-val">45 min</span> Time</div>
-          <div class="stat-box"><span class="stat-val">Out/Back</span> Type</div>
-        </div>
-        <strong style="color:#ccff00;">Pro-Tip:</strong> Do this at golden hour for sunset. Bring a headtorch for the descent.<br>
-        <a href="https://www.alltrails.com/trail/us/california/moro-rock-trail" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
-      </div>
-    </div>
   </div>
 
   <div id="survival-guide" class="view-section">
