@@ -221,7 +221,7 @@
     .survival-card.pink-warn .survival-title { color: #ff80bf; }
     .survival-card.yellow-warn .survival-title { color: #ffffff; }
 
-    .survival-title { font-size: 10vw; letter-spacing: -1px; color: #ccff00; margin-bottom: 20px; line-height: 0.9; }
+    .survival-title { font-size: 10vw; letter-spacing: -1px; color: #ccff00; margin-bottom: 20px; line-height: 0.9; text-transform: uppercase; }
     
     .rule-item { font-family: 'Courier New', Courier, monospace; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; line-height: 1.4; border-bottom: 1px dashed #333; padding-bottom: 15px; }
     .rule-item:last-child { border-bottom: none; }
@@ -232,7 +232,7 @@
     .survival-card.pink-warn .rule-label { background: #ff80bf; color: #050505; }
 
     /* Maps and Hiking Buttons */
-    .map-embed { width: 100%; height: 250px; border: 4px solid currentColor; margin-top: 15px; filter: grayscale(100%) contrast(1.2); }
+    .map-embed { width: 100%; height: 200px; border: 4px solid currentColor; margin-top: 15px; filter: grayscale(100%) contrast(1.2); }
     
     .out-link-btn {
       display: block; width: 100%; padding: 15px; margin-top: 15px;
@@ -242,9 +242,28 @@
     }
     .out-link-btn:active { transform: scale(0.98); }
     
-    .btn-mist { background: #ffffff; color: #050505; border: none; }
-    .btn-sentinel { background: #ffffff; color: #050505; border: none; }
-    .btn-sequoia { background: #ccff00; color: #050505; border: none; }
+    /* Specific hike button colors */
+    .btn-hard { background: #d10000; color: #ffffff; border: none; }
+    .btn-mod { background: #ff80bf; color: #050505; border: none; }
+    .btn-easy { background: #ccff00; color: #050505; border: none; }
+    .btn-white { background: #ffffff; color: #050505; border: none; }
+
+    /* Hard Stats Grid for Hikes */
+    .hike-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 15px 0;
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      font-size: 1.2rem;
+    }
+    .stat-box {
+      border: 2px solid currentColor;
+      padding: 10px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .stat-val { font-size: 1.8rem; display: block; }
 
   </style>
 </head>
@@ -272,15 +291,17 @@
       </div>
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">SEQUOIAS AIRBNB:</span><br>
-        Mineral King Rancho, 46300 Mineral King Road, Three Rivers, CA 93271
+        Mineral King Rancho, Three Rivers, CA<br>
+        <span style="color:#888; font-size: 1rem;">[INSERT EXACT ADDRESS HERE]</span>
       </div>
       <div class="rule-item" style="border-color: #555;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">YOSEMITE CABIN:</span><br>
-        Curry Village, 9010 Curry Village Dr, Yosemite Valley, CA 95389
+        Curry Village, Yosemite Valley, CA
       </div>
       <div class="rule-item" style="border-bottom: none;">
         <span class="rule-label" style="background:#ff80bf; color:#050505;">YOSEMITE AIRBNB:</span><br>
-        Mountain Lodge, 2513 Twin Peaks Road, Mariposa, CA
+        Mountain Lodge, Yosemite Area<br>
+        <span style="color:#888; font-size: 1rem;">[INSERT EXACT ADDRESS HERE]</span>
       </div>
     </div>
 
@@ -305,7 +326,7 @@
         <div class="day-title">INTO THE WOODS</div>
         <div class="plan-item"><span class="time-stamp">05:00</span> Depart Echo Park. Leaving after 6:30 costs you the morning hike.</div>
         <div class="plan-item"><span class="time-stamp">09:30</span> Arrive Sequoias. General Sherman Tree & Congress Trail.</div>
-        <div class="plan-item"><span class="time-stamp">14:30</span> Check into Mineral King Rancho.</div>
+        <div class="plan-item"><span class="time-stamp">16:00</span> Check into Mineral King Rancho Airbnb.</div>
         <div class="plan-item"><span class="time-stamp">17:30</span> Moro Rock 400-step staircase for sunset.</div>
       </div>
       <div class="day-card">
@@ -390,7 +411,7 @@
     <div class="survival-card pink-warn">
       <div class="survival-title">OFFLINE PROTOCOL</div>
       <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ff80bf; color:#050505;">CRITICAL:</span> You will not have cell service in Yosemite or Sequoia. Download the offline AllTrails routes below BEFORE leaving Echo Park.
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">CRITICAL:</span> No cell service in Yosemite or Sequoia. Download the offline AllTrails routes below BEFORE leaving Echo Park.
       </div>
     </div>
 
@@ -398,32 +419,98 @@
       <div class="survival-title" style="color: #ffffff;">YOSEMITE EPICS</div>
       
       <div class="rule-item" style="border-color: #555;">
-        <span class="rule-label" style="background:#ffffff; color:#050505;">1. MIST TRAIL TO NEVADA FALLS</span><br><br>
-        <strong style="color:#ffffff;">Distance:</strong> 6-8 miles &nbsp;|&nbsp; <strong style="color:#ffffff;">Climb:</strong> 2,000 ft &nbsp;|&nbsp; <strong style="color:#ffffff;">Time:</strong> 5-7 hrs<br><br>
-        <strong style="color:#ffffff;">Gear:</strong> Waterproofs, dry bag, boots, 2-3L water, poles.<br><br>
-        <strong style="color:#ffffff;">Tip:</strong> Hike UP Mist Trail, DOWN John Muir Trail (saves knees).<br>
-        <a href="https://www.alltrails.com/trail/us/california/vernal-and-nevada-falls-via-the-mist-trail" target="_blank" class="out-link-btn btn-mist">↓ ALLTRAILS MAP</a>
+        <span class="rule-label" style="background:#d10000; color:#ffffff;">HARD: MIST TRAIL TO NEVADA FALLS</span>
+        <div class="hike-stats" style="color: #ffffff;">
+          <div class="stat-box"><span class="stat-val">6-8 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">2,000 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">5-7 hrs</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ffffff;">Gear:</strong> Waterproofs, dry bag, boots, 2-3L water.<br>
+        <strong style="color:#ffffff;">Pro-Tip:</strong> Hike UP Mist Trail, DOWN John Muir Trail (saves knees).<br>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Happy+Isles+Trailhead,+Yosemite&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/vernal-and-nevada-falls-via-the-mist-trail" target="_blank" class="out-link-btn btn-hard">↓ ALLTRAILS MAP</a>
       </div>
 
       <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ffffff; color:#050505;">2. SENTINEL DOME & TAFT POINT</span><br><br>
-        <strong style="color:#ffffff;">Distance:</strong> 5.1 miles &nbsp;|&nbsp; <strong style="color:#ffffff;">Climb:</strong> 1,100 ft &nbsp;|&nbsp; <strong style="color:#ffffff;">Time:</strong> 3-4 hrs<br><br>
-        <strong style="color:#ffffff;">Gear:</strong> Windbreaker, SPF, 2L water.<br><br>
-        <strong style="color:#ffffff;">Tip:</strong> Check if Glacier Point Road is open. Backup: Upper Yosemite Falls.<br>
-        <a href="https://www.alltrails.com/trail/us/california/sentinel-dome-and-taft-point-loop" target="_blank" class="out-link-btn btn-sentinel">↓ ALLTRAILS MAP</a>
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: SENTINEL DOME & TAFT POINT</span>
+        <div class="hike-stats" style="color: #ffffff;">
+          <div class="stat-box"><span class="stat-val">5.1 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">1,100 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">3-4 hrs</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ffffff;">Gear:</strong> Windbreaker, SPF, 2L water.<br>
+        <strong style="color:#ffffff;">Pro-Tip:</strong> Check if Glacier Point Road is open. Backup is Upper Yosemite Falls.<br>
+        <iframe class="map-embed" style="border-color: #ffffff;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Sentinel+Dome+Trailhead,+Yosemite&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/sentinel-dome-and-taft-point-loop" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
+      </div>
+    </div>
+
+    <div class="survival-card medical-priority" style="border-color: #ffffff;">
+      <div class="survival-title" style="color: #ffffff;">YOSEMITE RECOVERY</div>
+      
+      <div class="rule-item" style="border-color: #555;">
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: LOWER YOSEMITE FALLS</span>
+        <div class="hike-stats" style="color: #ffffff;">
+          <div class="stat-box"><span class="stat-val">1.2 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">50 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">30 min</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Paved</span> Type</div>
+        </div>
+        <a href="https://www.alltrails.com/trail/us/california/lower-yosemite-falls-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
+      </div>
+
+      <div class="rule-item" style="border-bottom: none;">
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: MIRROR LAKE LOOP</span>
+        <div class="hike-stats" style="color: #ffffff;">
+          <div class="stat-box"><span class="stat-val">5.0 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">100 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">2 hrs</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <a href="https://www.alltrails.com/trail/us/california/mirror-lake-via-valley-loop-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
       </div>
     </div>
 
     <div class="survival-card yellow-warn">
-      <div class="survival-title">SEQUOIA CLASSIC</div>
+      <div class="survival-title">SEQUOIA CLASSICS</div>
       
+      <div class="rule-item" style="border-color: #555;">
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CONGRESS TRAIL</span>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">2.9 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">500 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">1.5 hrs</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Pro-Tip:</strong> Branch off the busy General Sherman path to walk among the giants in peace.<br>
+        <iframe class="map-embed" style="border-color: #ccff00;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Sherman+Tree+Trailhead,+Sequoia+National+Park&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+        <a href="https://www.alltrails.com/trail/us/california/congress-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
+      </div>
+
+      <div class="rule-item" style="border-color: #555;">
+        <span class="rule-label" style="background:#ccff00; color:#050505;">EASY: CRESCENT MEADOW</span>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">1.8 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">150 ft</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">1 hr</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Loop</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Pro-Tip:</strong> The ultimate dawn bird-watching loop.<br>
+        <a href="https://www.alltrails.com/trail/us/california/crescent-meadow-loop-trail" target="_blank" class="out-link-btn btn-easy">↓ ALLTRAILS MAP</a>
+      </div>
+
       <div class="rule-item" style="border-bottom: none;">
-        <span class="rule-label" style="background:#ccff00; color:#050505;">3. CONGRESS TRAIL & MORO ROCK</span><br><br>
-        <strong style="color:#ccff00;">Distance:</strong> 2.5 miles &nbsp;|&nbsp; <strong style="color:#ccff00;">Climb:</strong> 500 ft (400 steps) &nbsp;|&nbsp; <strong style="color:#ccff00;">Time:</strong> 2.5 hrs<br><br>
-        <strong style="color:#ccff00;">Gear:</strong> Light layers, 1L water, headtorch.<br><br>
-        <strong style="color:#ccff00;">Tip:</strong> Escape General Sherman crowds on Congress Trail. Do Moro Rock at sunset.<br>
-        <a href="https://www.alltrails.com/trail/us/california/the-congress-trail" target="_blank" class="out-link-btn btn-sequoia">↓ CONGRESS MAP</a>
-        <a href="https://www.alltrails.com/trail/us/california/moro-rock-trail" target="_blank" class="out-link-btn btn-sequoia" style="margin-top: 10px;">↓ MORO ROCK MAP</a>
+        <span class="rule-label" style="background:#ff80bf; color:#050505;">MODERATE: MORO ROCK</span>
+        <div class="hike-stats">
+          <div class="stat-box"><span class="stat-val">0.4 mi</span> Distance</div>
+          <div class="stat-box"><span class="stat-val">400 steps</span> Climb</div>
+          <div class="stat-box"><span class="stat-val">45 min</span> Time</div>
+          <div class="stat-box"><span class="stat-val">Out & Back</span> Type</div>
+        </div>
+        <strong style="color:#ccff00;">Pro-Tip:</strong> Do this at golden hour for sunset. Bring a headtorch for the descent.<br>
+        <a href="https://www.alltrails.com/trail/us/california/moro-rock-trail" target="_blank" class="out-link-btn btn-mod">↓ ALLTRAILS MAP</a>
       </div>
     </div>
   </div>
